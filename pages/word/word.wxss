@@ -1,0 +1,83 @@
+/* word.wxss */
+@import "../template/template.wxss";
+@import "../../components/modal/modal.wxss";
+
+page {
+  background: url(http://image.chubanyun.net/images/Dictation/word/bg.png);
+  /* background-color: #217a7e; */
+  background-size: 110% 110%;
+  background-position: 50% 50%;
+}
+
+.list-wrapper {
+  padding-bottom: 30rpx;
+  height: 1200rpx;
+}
+
+.list {
+  width: 670rpx;
+  margin: 0 auto;
+  margin-top: 30rpx;
+  border-radius: 10rpx;
+  padding: 30rpx 0 35rpx 30rpx;
+  display: flex;
+  justify-content: space-between;
+  vertical-align: middle;
+  background-color: rgba(255, 250, 205, 0.3);
+}
+
+.time {
+  display: flex;
+  justify-content: center;
+}
+
+.num {
+  font-size: 35px;
+  font-weight: 600;
+  font-family: Microsoft YaHei;
+  color: #54dbc9;
+}
+
+.txt2 {
+  color: #fff;
+}
+
+.text .text1 {
+  margin-right: 14rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+.time_img {
+  margin-right: 8rpx;
+}
+
+.time_img image {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.right {
+  display: flex;
+  vertical-align: middle;
+  font-size: 18px;
+  padding-top: 6.5%;
+  padding-right: 29rpx;
+  font-family: Microsoft YaHei;
+}
+
+.login {
+  width: 40rpx;
+  height: 30rpx;
+  margin-left: 70rpx;
+  padding-top: 16rpx;
+}
+.mask {
+  position: fixed;
+  z-index: 1000;
+  background:rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
+  top:0;
+  left:0;
+}

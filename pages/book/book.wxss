@@ -1,0 +1,166 @@
+/* book.wxss */
+
+page {
+  height: 100%;
+}
+
+view {
+  box-sizing: border-box;
+}
+
+.background {
+  min-height: 100%;
+  /* background:url(http://image.chubanyun.net/images/Dictation/word/bg.png) repeat-y;
+   */
+  background: #217a7e;
+  background-size: 100%;
+  background-position: 0 0;
+}
+
+/*头部*/
+
+.title {
+  width: 100vw;
+  background-color: #a5e24d;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.publicKeyNum {
+  font-size: 14px !important;
+  line-height: 18px !important;
+  padding: 8px 0;
+  padding-right: 5px;
+  flex: 1;
+  color: #147426;
+}
+
+.book-title {
+  width: auto;
+  padding: 8px 0;
+  padding-left: 30rpx;
+  flex-grow: 1;
+  flex: 4;
+  padding-right: 20rpx;
+  color: #147426;
+}
+
+/*单元列表*/
+.sortName{text-align:center;padding-top:40rpx;color:#fff;}
+.unit-list {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 0rpx 30rpx 0rpx;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.unit-item {
+  margin-top: 30rpx;
+  margin-left: 0rpx;
+  flex-wrap: wrap;
+  font-size: 0;
+  display: flex;
+  width: 33%;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.unit-discover {
+  width: 190rpx;
+  height: 190rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url(http://image.chubanyun.net/images/Dictation/unit/class_bg.png) no-repeat;
+  background-size: contain;
+  margin: 10rpx;
+}
+
+.unit-index {
+  font-size: 30px;
+  color: #fff;
+}
+
+.unit-list .unit-item .icon {
+  width: 200rpx;
+  height: 200rpx;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  position: absolute;
+  z-index: -1;
+}
+
+.unit-list .unit-item .unit-name {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 0 5rpx;
+  max-height: 36px;
+  overflow: hidden;
+  color: #fff;
+  /*word-break:break-all;*/
+}
+
+/*根据星星的数量来显示星星*/
+
+.unit-star-3, .unit-star-2, .unit-star-1, .unit-star-0 {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 10rpx 0 10rpx;
+  flex-grow: 0;
+}
+
+.unit-star-3 view {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/unit/start.png);
+  background-size: cover;
+}
+
+.unit-star-2 view:nth-child(1), .unit-star-2 view:nth-child(2) {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/unit/start.png);
+  background-size: cover;
+}
+
+.unit-star-2 view:nth-child(3) {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/book/unstar.png);
+  background-size: cover;
+}
+
+.unit-star-1 view:nth-child(1) {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/unit/start.png);
+  background-size: cover;
+}
+
+.unit-star-1 view:nth-child(2), .unit-star-1 view:nth-child(3) {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/book/unstar.png);
+  background-size: cover;
+}
+
+.unit-star-0 view {
+  width: 38rpx;
+  height: 38rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/book/unstar.png);
+  background-size: cover;
+}
+.mask {
+  position: fixed;
+  z-index: 1000;
+  background:rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
+  top:0;
+  left:0;
+}

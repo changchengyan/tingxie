@@ -1,0 +1,41 @@
+<!--searchlist.wxml-->
+<view class="{{font}} searchBox" >
+  <!--年级列表  -->
+  <view class="{{grade_listBox}}">
+     <view class="mask" bindtap="hideGradeList">
+        <view class="grade_list">
+          <text class="f4">请选择你的年级</text>
+          <view class="list" catchtap="chooseGrade">
+            <view id="grade1">一年级</view>
+            <view id="grade2">二年级</view>
+            <view id="grade3">三年级</view>
+            <view id="grade4">四年级</view>
+            <view id="grade5">五年级</view>
+            <view id="grade6">六年级</view>
+          </view>
+        </view>
+     </view> 
+  </view>
+  
+  <!--书籍列表  -->
+    <block>
+      <scroll-view class="page-list" scroll-y="true" enable-back-to-top="true" catchtap="hideGradeList" bindscrolltolower="getBook">
+        <view class="choose_grade f3 right" catchtap="showGradeList">{{grade}}</view>
+        <!--列表页-->
+        <view class="book-list" wx:if="{{book.count > 0}}">
+          <view class="item" wx:for="{{book.list}}" wx:key="id" catchtap="toBookPage" data-book-id="{{item.id}}" data-book-index="{{index}}">
+            <view class="item-content">
+              <view class="icon-view" style="height:{{imgHeight}}px">
+                <view style="background:url({{item.book_pic}}) no-repeat center;" class="book-img"></view>
+                <image class="icon" src="{{item.book_pic}}" mode="widthFix" style="padding:{{fixPadding}}px 0"></image>
+              </view>
+              <view class="exiting f2" wx:if="{{item.isadd}}">已添加</view> 
+            </view>
+            <view class="text-view f2">
+              <text class="text">{{item.book_name}}</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </block>
+</view>
