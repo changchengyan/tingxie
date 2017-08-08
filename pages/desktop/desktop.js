@@ -254,8 +254,7 @@ Page({
       loadding: false,
       loadLastId: 0,
       loadMore: true,
-      backFromSearch: true,
-      isLoading: false
+      backFromSearch: true
     });
     //加载
     this.loadBookList();
@@ -386,6 +385,7 @@ Page({
     console.log(book_id);
     var book_index = event.currentTarget.dataset.bookIndex;
     this.setData({ ifTrueDel: true, bookId: book_id, bookIndex: book_index });
+    this.sureDel();
   },
   noDel: function () {
     this.setData({ ifTrueDel: false });
@@ -413,7 +413,7 @@ Page({
           if (bookdata.total_count == 0) {
             that.longTapReset();
           }
-
+          /*
           wx.showToast
             (
             {
@@ -422,6 +422,7 @@ Page({
               duration: 2000
             }
             )
+            */
 
         }
         else {

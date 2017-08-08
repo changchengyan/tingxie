@@ -48,16 +48,16 @@ page {
 }
 
 .juxing {
-  background-color: #50e4a9;
+  background-color: #6cd7ac;
 }
 
-.bg_img {
+/* .bg_img {
   background: url(http://image.chubanyun.net/images/Dictation/word/bg_juxing.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   width: 100%;
   height: 80rpx;
-}
+} */
 
 .txt {
   color: #fff;
@@ -88,25 +88,38 @@ page {
 .wo {
   /* background: url(http://image.chubanyun.net/images/Dictation/word/Bubble_b.png);
   background-repeat: no-repeat;
-  background-size: 100% 100%; */
-  background: linear-gradient(to bottom, #a6e159, #72c826);
-  padding: 18rpx 25rpx;
+  background-size: 100% 100%; 
+  padding: 30rpx 50rpx; */
   margin-top: 30rpx;
   margin-right: 30rpx;
   font-size: 15px;
   color: #fff;
   font-family: Microsoft YaHei;
-  box-shadow: 2rpx 2rpx 5rpx #3ec977;
-  border-radius: 10rpx;
+  background-color: #a3df55;
+  padding: 25rpx 33rpx;
+  box-shadow: 5rpx 11rpx #52bd92;
+  border-radius: 30rpx;
 }
 
 .bg_p {
   padding: 65rpx 120rpx;
 }
 
+.realwords {
+  display: flex;
+  justify-content: space-between;
+}
+
 .cihui {
-  margin-bottom: -50rpx;
+  /* margin-bottom: -50rpx; */
   color: #fff;
+  margin-top: 20rpx;
+}
+
+.frog {
+  width: 128rpx;
+  height: 82rpx;
+  margin-top: 14rpx;
 }
 
 .num {
@@ -148,16 +161,17 @@ page {
 .errwo {
   /* background: url(http://image.chubanyun.net/images/Dictation/word/Bubble_r.png);
   background-repeat: no-repeat;
-  background-size: 100% 100%; */
-  background: linear-gradient(to bottom, #ff7676, #ff3f3f);
-  padding: 18rpx 25rpx;
+  background-size: 100% 100%;
+  padding: 30rpx 50rpx; */
   margin-top: 30rpx;
   margin-right: 30rpx;
-  border-radius: 10rpx;
   font-size: 15px;
   color: #fff;
   font-family: Microsoft YaHei;
   font-weight: bold;
+  background-color: #fe4052;
+  padding: 22rpx 30rpx;
+  border-radius: 20rpx;
 }
 
 .end {
@@ -173,5 +187,6 @@ page {
   line-height: 170rpx;
   border-top-left-radius: 50rpx;
   border-top-right-radius: 55rpx;
-  box-shadow: 0 -20rpx 60rpx #dbcc99;
+  box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08);
 }

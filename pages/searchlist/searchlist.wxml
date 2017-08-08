@@ -1,6 +1,14 @@
 <!--searchlist.wxml-->
 <view class="{{font}} searchBox" >
   <!--年级列表  -->
+
+  <view class="list-top">
+    <view class="title"  catchtap="showGradeList">全部(点击筛选)</view>
+    <view class="scan"  catchtap="bindStartScan">扫码添加书籍</view>
+  </view>
+  <view class="list-top-area"></view>
+
+
   <view class="{{grade_listBox}}">
      <view class="mask" bindtap="hideGradeList">
         <view class="grade_list">
@@ -19,23 +27,33 @@
   
   <!--书籍列表  -->
     <block>
-      <scroll-view class="page-list" scroll-y="true" enable-back-to-top="true" catchtap="hideGradeList" bindscrolltolower="getBook">
-        <view class="choose_grade f3 right" catchtap="showGradeList">{{grade}}</view>
+      <scroll-view class="page-list" scroll-y="true" enable-back-to-top="true" catchtap="hideGradeList" bindscrolltolower="loadBookList">
         <!--列表页-->
-        <view class="book-list" wx:if="{{book.count > 0}}">
-          <view class="item" wx:for="{{book.list}}" wx:key="id" catchtap="toBookPage" data-book-id="{{item.id}}" data-book-index="{{index}}">
-            <view class="item-content">
-              <view class="icon-view" style="height:{{imgHeight}}px">
-                <view style="background:url({{item.book_pic}}) no-repeat center;" class="book-img"></view>
-                <image class="icon" src="{{item.book_pic}}" mode="widthFix" style="padding:{{fixPadding}}px 0"></image>
-              </view>
-              <view class="exiting f2" wx:if="{{item.isadd}}">已添加</view> 
-            </view>
-            <view class="text-view f2">
-              <text class="text">{{item.book_name}}</text>
-            </view>
-          </view>
+        <view wx:for='{{gradeArr}}' >
+        	<view wx:if='{{bookJson[item]}}'>
+        	<view class="grade f2 color6">{{item}}</view>
+        	<view class="book-list" wx:if="{{book.count > 0}}">
+	          <view class="item" wx:for="{{bookJson[item]}}" wx:key="id" catchtap="toBookPage" data-book-id="{{item.id}}" data-book-index="{{index}}">
+	            <view class="item-content">
+	              <view class="icon-view" style="height:{{imgHeight}}px">
+	                <view style="background:url({{item.book_pic}}) no-repeat center;" class="book-img"></view>
+	                <image class="icon" src="{{item.book_pic}}" mode="widthFix" style="padding:{{fixPadding}}px 0"></image>
+	              </view>
+	              <view class="exiting f2" wx:if="{{item.isadd}}">已添加</view> 
+	            </view>
+	            <view class="text-view f2">	  
+	            	<view class="publishing f1">
+	            	<view class="dot"></view>
+	            	<view class="text">{{item.book_publish_brief}}</view>
+	            	<view class="dot"></view>
+	            	</view>          	
+	              <view class="text">{{item.book_name}}</view>
+	            </view>
+	          </view>
+	        </view>
+	        </view>
         </view>
+        
       </scroll-view>
     </block>
 </view>

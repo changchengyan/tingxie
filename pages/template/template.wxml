@@ -20,22 +20,22 @@
 
 <template name="Buy">
  <view class="maskBox"></view> 
-  <view class="maskOfKey">
-  
-  <view class="delKey">
-      <image src="../../images/unit/delete_box.png" mode="widthFix" bindtap="returnToUnit"></image>
-  </view>
-  <view class="tips">本节课程解锁需要：</view>
-     <view class="key">
-      <image src="../../images/unit/key.png" ></image>
-      <text class="keyNum">×1</text>
+  <view class="maskOfKey clearfix">
+    <view class="titleOfTips">
+        <image  class="title-bg" src="../../images/unit/modeOfTitle.png" mode="widthFix"></image>
+        <image  class="del" src="../../images/unit/delete_box.png" mode="widthFix" bindtap="returnToUnit"></image>
     </view>
-    <view class="openThisUnitWithKey" bindtap="openThisUnitWithKey">
-        钥匙解锁
-    </view>
-    <view class="openAllBook" bindtap="openAllBook">
-      解锁全书
-    </view>
+    <view class="tips">你共有 <image src="../../images/unit/key.png" mode="widthFix"></image>    ×{{key_rest_count}} </view>
+      <view class="openThisUnitWithKey" bindtap="openThisUnitWithKey">
+      <image src="../../images/unit/needKeyNum.png" mode="widthFix"></image> 
+      </view>
+      <view class="openAllBook" bindtap="openAllBook">
+      <view class="NeedMoney"><text class="symbol LeftY">￥</text> <text class="showNumOfMoney">{{money}}</text> <text class="symbol LeftC">元</text></view>     
+      <!-- <image src="../../images/unit/BuyThisBook.png" mode="widthFix"></image>       -->
+      </view>
+      <view class="WX-onSecurity">
+      <image src="../../images/unit/modeOfFooter.png" mode="widthFix"></image>            
+      </view>
   </view>
 </template>
 
@@ -70,3 +70,4 @@
   <view class="mask" hidden="{{isLoading}}"></view>
   <loading hidden="{{isLoading}}">加载中...</loading>
 </template>
+

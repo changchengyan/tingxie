@@ -13,7 +13,8 @@ Page({
     book_name: null,
     book_id: 0,
     lesson_name: null,
-    bg_p: null
+    bg_p: null,
+    type_p: 'type_p'
   },
   //切换是否为错误单词
   toggleErrWord: function (e) {
@@ -128,10 +129,18 @@ Page({
 
       // }
     })
-    wx.redirectTo({
-      url: `../../finally/finally?star=${that.data.star}&lessonId=${lessonId}&navigation_type=${that.data.navigation_type}&book_name=${that.data.book_name}&book_id=${that.data.book_id}&lessonName=${that.data.lesson_name}`,
-    })
-    console.log(that.data.star)
+    console.log(that.data.navigation_type)
+    if (that.data.navigation_type == 'book' ){
+      wx.redirectTo({
+        url: `../../book/book?star=${that.data.star}&lessonId=${lessonId}&navigation_type=${that.data.navigation_type}&book_name=${that.data.book_name}&book_id=${that.data.book_id}&lessonName=${that.data.lesson_name}&type_p=${that.data.type_p}`,
+      })
+    }
+    if (that.data.navigation_type == 'custom'){
+      wx.redirectTo({
+        url: `../../word/word?star=${that.data.star}&lessonId=${lessonId}&navigation_type=${that.data.navigation_type}&lessonName=${that.data.lesson_name}&type_p=${that.data.type_p}`,
+      })
+    }
+
   },
   /**
    * 页面参数需要lessonId和testTime
@@ -144,6 +153,10 @@ Page({
       book_id: options.book_id,
       lesson_name: options.lessonName
     })
+    //设置标题名字
+    wx.setNavigationBarTitle({
+      title: that.data.lesson_name
+    });
     console.log(options.navigation_type, options.book_name, options.book_id, options.lessonName)
     let listWords = wx.getStorageSync('lastPlayList')
     console.log(options);
@@ -156,7 +169,7 @@ Page({
     that.testInfo = options;
     console.log(options.lessonId)
     wx.playBackgroundAudio({
-      dataUrl: "http://image.chubanyun.net/images/Dictation/505.wav",
+      // dataUrl: "http://image.chubanyun.net/images/Dictation/505.wav",
     })
 
     //   for (let i = 0; i < listWords.length;i++){

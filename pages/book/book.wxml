@@ -27,6 +27,31 @@
     <text class="jz">{{loadText}}</text>
   </view>
 </view>
+
+<!--submit  -->
+<view class="submited" wx:if="{{returnload}}">
+ <view class="subBox"></view> 
+<view class="sub_bg" bindtap="sub">
+    <view class="sub_star_{{star}}">
+    <view></view>
+    <view style="margin-top:-40rpx"></view>
+    <view></view>
+  </view> 
+   <view class="tips_star">
+    <view wx:if="{{star>1}}">恭喜,恭喜,恭喜你！</view>
+    <view wx:elif="{{star==1}}">继续加油哦！</view>
+    <view wx:elif="{{star==0}}">哈哈哈 没有星星吧！</view>
+  </view>
+  <view class="btn">
+    <view class="me">
+     <image src="../../images/finally/list.png" bindtap="returnList"></image>
+    <image src="../../images/finally/again.png" style="width:160rpx;height:160rpx" bindtap="playAgain"></image>
+    <image src="../../images/finally/next.png" bindtap="nextPlay" style="margin-right:35rpx"></image> 
+  </view>
+  </view>  
+</view>
+</view>
+
   <!--loading  -->
 <import src="../template/template.wxml" />
 <template is="pageLoading" data="{{isLoading}}"></template>

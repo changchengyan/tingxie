@@ -5,7 +5,7 @@ Page({
     repeatOnce: true,
     playSep: 5,
     showWord: true,
-    playSequence: false,
+    playSequence: true,
     showToast: false,
     playing: false,
     currentWord: '',
@@ -26,7 +26,7 @@ Page({
     isLoading: false,
     isInplayAudio: true,
     playFlag: 1,
-    inTwiceCenter:false
+    inTwiceCenter: false
 
   },
   // 切换重复次数
@@ -105,7 +105,11 @@ Page({
   seekPlayProgress: function (e) {
     let that = this;
     let { action } = e.target.dataset
-    let { currentIndex, wordCount, playing } = this.data
+    let { currentIndex, wordCount, playing } = this.data;
+    //振动
+    wx.vibrateShort(function (res) {
+      console.log(res)
+    })
     if (action == 'prev') {
       if (--currentIndex <= 0) {
         that.toast('当前已经是第一个了', 1000)
@@ -148,9 +152,9 @@ Page({
     if (that.data.playFlag == 2) {
       if (!that.data.isInplayAudio && !that.data.inTwiceCenter) {
         that.getCurrentPlayStatus(currentIndex + 1);
-      }else {
+      } else {
         that.playHack(1)
-        
+
       }
     } else {
       if (that.data.isInplayAudio) {
@@ -200,7 +204,7 @@ Page({
       wx.redirectTo({
         url: `/pages/word/details/details?lessonId=${that.lessonId}&lessonName=${that.data.lessonName}&testTime=${that.data.playTime}&navigation_type=${that.data.navigation_type}&book_id=${that.data.book_id}&book_name=${that.data.book_name}`,
       })
-      console.log(that.lessonId)
+      // console.log(that.lessonId)
     }
     if (that.data.playing == false) return false;
     that.updatePlayProgress(curIndex)
@@ -209,7 +213,7 @@ Page({
     if (repeatOnce == false) {
       wx.onBackgroundAudioStop(function () {
         if (that.data.playFlag == 2) {
-          
+
           that.timerOne = setTimeout(function () {
             that.getCurrentPlayStatus(++curIndex)
           }, playSep * 1000)
@@ -219,9 +223,9 @@ Page({
           that.data.inTwiceCenter = true;
           that.timerTwo = setTimeout(function () {
             if (that.data.playing == false) return false;
-            
+
             that.playHack(1)
-            
+
           }, 1000)
         }
       })
@@ -252,6 +256,7 @@ Page({
         }
       })
     }
+    //console.log(that.getPlayUrl(currentWord['word_mp3_url'], soundType))
   },
   // 或者单个mp3 
   getWordMp3: function (curIndex, soundType) {
@@ -302,13 +307,15 @@ Page({
   },
   //处理播放单词的url
   getPlayUrl: function (url, soundType) {
-    let subfixArr = ['_nan.mp3', '_nv.mp3']
-    let o_url = url.slice(0, -4)
+    let subfixArr = ['_nan', '_nv']
+    let o_url = url.slice(0, -4);
+    let o_url_type = url.slice(-4)
+
     if (soundType == 1) {
-      return o_url + subfixArr[0]
+      return o_url + subfixArr[0] + o_url_type;
     }
     else {
-      return o_url + subfixArr[1]
+      return o_url + subfixArr[1] + o_url_type;
     }
   },
   //数组随机排序
@@ -391,8 +398,11 @@ Page({
       navigation_type: options.navigation_type,
       book_name: options.bookname,
       book_id: options.book_id,
-
     })
+    //设置标题名字
+    wx.setNavigationBarTitle({
+      title: that.data.lessonName
+    });
     wx.getStorage({
       key: 'bookId',
       success: function (res) {
@@ -441,8 +451,8 @@ Page({
       //更新播放列表
       that.updatePlayList();
       //加载完成后开始播放
-      if (that.data.isLoading){
-        that.play();        
+      if (that.data.isLoading) {
+        that.play();
       }
     })
 
@@ -474,7 +484,7 @@ Page({
     // this.pause();
     // wx.stopBackgroundAudio()
   },
-  onShow:function(){
+  onShow: function () {
     var that = this;
     //判断网络
     wx.getNetworkType
@@ -483,7 +493,7 @@ Page({
           // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
           var networkType = res.networkType;
           if (networkType == "none") {
-            // that.setData({ isLoading: true });            
+            that.setData({ isLoading: true });
             wx.showToast({
               title: '网络异常',
               duration: 2000

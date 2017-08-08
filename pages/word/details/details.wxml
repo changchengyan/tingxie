@@ -18,14 +18,18 @@
       <view class="find"><text class="txt">找出错词</text> </view>
       <view class="words">
         <view class="words_in" wx:for="{{listWords}}" bindtap="toggleErrWord" data-index="{{index}}">
-          <view class="wo ">{{item.display_word}}</view>
+          <!-- <view class="wo {{item.display_word.length>15?'bg_p':''}}">{{item.display_word}}</view> -->
+          <view class="wo">{{item.display_word}}</view>
         </view>
       </view>
-      <view class="cihui">正确词汇：<text class="num">{{listWords.length}}</text>个</view>
-      <!-- <view class="foot">共{{listWords.length}}个词汇，错误词汇{{errCount}}个</view> -->
+      <view class="realwords">
+        <view class="cihui">正确词汇：<text class="num">{{listWords.length}}</text>个</view>
+        <image class="frog" src="../../../images/word/ice_frog.png"></image>
+      </view>
+
     </view>
   </view>
-  <view class="bg_img"></view>
+  <!-- <view class="bg_img"></view> -->
 
   <!--错误的单词  -->
   <view class="err">
@@ -35,6 +39,7 @@
     </view>
     <view class="errwords">
       <view class="errwords_in " wx:for="{{errList}}" wx:for-item="iii" data-errindex="{{index}}" bindtap="delerr">
+        <view class="em"></view>
         <view class="errwo ">{{iii.display_word}}</view>
       </view>
     </view>

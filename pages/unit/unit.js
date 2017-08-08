@@ -8,7 +8,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    id: 0,
     book_id: null,
     lesson_id: null,
     dictation_lesson_id: 0,
@@ -22,7 +21,7 @@ Page({
     // originWord: [],
     words_number: 0,
     user_input: "",
-    input_area_display: "hide",
+    input_area_display: false,
     button_display: "show",
     navigation_type: "book",
     ifDefaultTouch: "promiseTouch",
@@ -35,7 +34,6 @@ Page({
     isRepeat: false,
     showKey: false,
     goPayDetail: false,
-    money: 3,
     Name: null,
     resourceNum: 0,
     goTap: false,
@@ -54,7 +52,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-    console.log(options);
+    //console.log(options);
     var uid = app.globalData.userInfo.weixinUser.uid;
     // wx.setNavigationBarTitle({
     //   title: options.lesson_name
@@ -68,6 +66,11 @@ Page({
       lesson_name: options.lesson_name,
       book_name: options.bookname
     });
+    //设置标题名字
+    wx.setNavigationBarTitle({
+      title: that.data.Name+" "
+    });
+
     if (options.book_id || options.book_id == 0) {
       this.setData({
         book_id: options.book_id
@@ -78,29 +81,18 @@ Page({
         lesson_id: options.lesson_id
       })
     };
-    if (that.data.navigation_type === "book") {
-      app.Dictation.ifAssess(that.data.uid, that.data.lesson_id, function (res) {
-        // console.log(res);
-        that.setData({ unlock: res.data.unlock });
-      })
-      app.Dictation.ownKeyNum(that.data.uid, function (res) {
-        that.setData({ key_rest_count: res.data.key_rest_count });
-        console.log("钥匙个数为" + that.data.key_rest_count);
-      });
-      app.Dictation.getBookPriceById(that.data.book_id, function (res) {
-        var price = res.data.price;
-        that.setData({ money: price })
-      })
-    }
+
     if (options.share == 'true') {
       //分享页面过来的
       if (this.data.book_id || this.data.book_id == 0) {
         //课本 --已跳首页   	
         if (that.data.uid) {
           getBookLessonByShare();
+
         } else {
           app.userLogin(function () {
             getBookLessonByShare();
+
           })
         }
 
@@ -119,11 +111,11 @@ Page({
     }
     function getLessonByShare() {
       app.Dictation.getLessonByShare(options.lesson_id, function (res) {
-        console.log('分享我的自定义')
-        console.log(res)
+        //console.log('分享我的自定义')
+        //console.log(res)
         //getLessonWord();
         that.setData({
-          id: res.data.id,
+          lesson_id: res.data.id,
           lesson_name: res.data.lesson_name,
           words: res.data.wordlist,
           // originWord: res.data.wordlist,
@@ -136,8 +128,9 @@ Page({
     }
     function getBookLessonByShare() {
       app.Dictation.getBookLessonByShare(options.lesson_id, function (res) {
+        console.log("getBookLessonByShare", res)
         that.setData({
-          id: res.data.id,
+          lesson_id: res.data.id,
           lesson_name: res.data.lesson_name,
           words: res.data.wordlist,
           // originWord: res.data.wordlist,
@@ -150,6 +143,7 @@ Page({
         that.getDelShowWords(that.data.del_words);
         that.getShareShowWords(that.data.share_words);
         that.wordsCount(that.data.words);
+        KeyInfo()
       });
     }
 
@@ -157,9 +151,9 @@ Page({
       console.log("tianjia")
       if (that.data.navigation_type === "book") {
         app.Dictation.getBookLessonWord(options.lesson_id, function (res) {
-          console.log(res);
+
           that.setData({
-            id: res.data.id,
+            lesson_id: res.data.id,
             lesson_name: res.data.lesson_name,
             words: res.data.wordlist,
             // originWord: res.data.wordlist,
@@ -170,13 +164,14 @@ Page({
           that.getShowWords(that.data.words);
           that.getDelShowWords(that.data.del_words);
           that.wordsCount(that.data.words);
+          KeyInfo()
         })
       }
       else if ((that.data.navigation_type === "custom") && (options.lesson_id)) {
         app.Dictation.getLessonWord(options.lesson_id, function (res) {
-          console.log(res)
+          //console.log(res)
           that.setData({
-            id: res.data.id,
+            lesson_id: res.data.id,
             lesson_name: res.data.lesson_name,
             words: res.data.wordlist,
             // originWord: res.data.wordlist,
@@ -194,6 +189,25 @@ Page({
         }, 1000)
       }
     }
+
+    function KeyInfo() {
+      if (that.data.navigation_type === "book") {
+        app.Dictation.ifAssess(that.data.uid, that.data.lesson_id, function (res) {
+          console.log(that.data.uid, that.data.lesson_id);
+          console.log(res)
+          that.setData({ unlock: res.data.data.unlock });
+        })
+        app.Dictation.ownKeyNum(that.data.uid, function (res) {
+          that.setData({ key_rest_count: res.data.key_rest_count });
+          console.log("钥匙个数为" + that.data.key_rest_count);
+        });
+        app.Dictation.getBookPriceById(that.data.book_id, function (res) {
+          var price = res.data.price;
+          that.setData({ money: price })
+        })
+      }
+    }
+
     that.setData({
       isLoading: true
     })
@@ -230,7 +244,7 @@ Page({
       this.editShow();
     }
     //重新进入时，如果之前正在编辑，弹起输入法
-    if (this.data.input_area_display === "show") {
+    if (this.data.input_area_display) {
       that.setData({
         focus: true
       })
@@ -239,7 +253,7 @@ Page({
     if (!that.data.isFirstShow && that.data.navigation_type === "book") {
       app.Dictation.ifAssess(that.data.uid, that.data.lesson_id, function (res) {
         console.log(res);
-        that.setData({ unlock: res.data.unlock });
+        that.setData({ unlock: res.data.data.unlock });
       })
       app.Dictation.ownKeyNum(that.data.uid, function (res) {
         that.setData({ key_rest_count: res.data.key_rest_count });
@@ -256,6 +270,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+    console.log(this.data.focus)
     this.setData({
       focus: false,
       isFirstShow: false
@@ -314,7 +329,7 @@ Page({
   onShareAppMessage: function () {
     var that = this;
     if (that.data.navigation_type === "custom") {
-      if (this.data.id === 0) {
+      if (this.data.lesson_id === 0 || this.data.lesson_id === null) {
         //自定义编辑页--跳首页
         return {
           title: 'Rays听写',
@@ -324,7 +339,7 @@ Page({
         //我的自定义列表的单元页
         return {
           title: this.data.lesson_name,
-          path: '/pages/unit/unit?navigation_type=' + this.data.navigation_type + '&lesson_id=' + this.data.id + '&share=true'
+          path: '/pages/unit/unit?navigation_type=' + this.data.navigation_type + '&lesson_id=' + this.data.lesson_id + '&share=true'
         }
       }
 
@@ -334,7 +349,7 @@ Page({
       //课本列表的单元页--跳首页
       return {
         title: this.data.lesson_name,
-        path: '/pages/unit/unit?navigation_type=' + this.data.navigation_type + '&lesson_id=' + this.data.id + '&share=true' + '&book_id=' + this.data.book_id
+        path: '/pages/unit/unit?navigation_type=' + this.data.navigation_type + '&lesson_id=' + this.data.lesson_id + '&share=true' + '&book_id=' + this.data.book_id
       }
 
       // } 
@@ -351,6 +366,22 @@ Page({
   inputWord: function (e) {
     this.setData({
       user_input: e.detail.value,
+    });
+  },
+  inputBlur: function () {
+    this.setData({
+      focus: false,
+    });
+    var that = this;
+    this.setData({
+      input_area_display: false,
+      button_display: "show",
+      focus: false,
+    });
+  },
+  inputFocus: function () {
+    this.setData({
+      focus: true,
     })
   },
   sendWords: function (e) {
@@ -439,27 +470,27 @@ Page({
       })
     }
     //点击添加后，更新单词表，获取mp3Url
-    if (this.data.id !== 0) {
+    if (this.data.lesson_id !== null) {
       // var wordList = [];
       // that.data.words.forEach(function (value, index, array) {
       //   wordList[index] = value.dictation_word;
       // })
       // wordList = wordList.join(";");
       let wordlist = [];
-      finalInput.forEach(function (value, index){
+      finalInput.forEach(function (value, index) {
         wordlist.push(value.dictation_word);
       })
       wordlist = wordlist.join(";");
-      if(wordlist === ""){
+      if (wordlist === "") {
         return false;
       }
-      app.Dictation.AddUserLessonWord(that.data.id, wordlist, function (res) {
+      app.Dictation.AddUserLessonWord(that.data.lesson_id, wordlist, function (res) {
         // that.setData({
         //   originWord: that.data.words
         // })
       })
       setTimeout(function () {
-        app.Dictation.getLessonWord(that.data.id, function (res) {
+        app.Dictation.getLessonWord(that.data.lesson_id, function (res) {
           that.setData({
             words: res.data.wordlist
           })
@@ -474,38 +505,45 @@ Page({
       wordList = wordList.join(";");
       app.Dictation.addLesson(wordList, function (res) {
         that.setData({
-          id: res.data.userLessonId,
+          lesson_id: res.data.userLessonId,
           // originWord: res.data.wordlist
         })
       })
       setTimeout(function () {
-        app.Dictation.getLessonWord(that.data.id, function (res) {
+        app.Dictation.getLessonWord(that.data.lesson_id, function (res) {
           that.setData({
             words: res.data.wordlist
           })
         })
       }, 1500)
     }
+    //console.log(that.data.words)
     that.getShowWords(that.data.words);
     //清空输入
     that.setData({
       user_input: "",
       isRepeat: false
     });
+    var that = this;
+    this.setData({
+      input_area_display: false,
+      button_display: "show",
+      focus: false,
+    });
   },
   //输入框的隐藏和显示
   editShow: function () {
     var that = this;
     this.setData({
-      input_area_display: "show",
+      input_area_display: true,
       button_display: "hide",
-      focus: true
+      focus: true,
     });
   },
   editHide: function (e) {
     var that = this;
     this.setData({
-      input_area_display: "hide",
+      input_area_display: false,
       button_display: "show",
       focus: false,
     });
@@ -539,9 +577,9 @@ Page({
       //如果从书籍跳转过来
       if (that.data.navigation_type === "book") {
         // if (JSON.stringify(that.data.words) == JSON.stringify(that.data.originWord)) {
-          templateJs.goPlay(that.data.id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
-          console.log(that.data.id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
-          return true;
+        templateJs.goPlay(that.data.lesson_id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
+        console.log(that.data.lesson_id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
+        return true;
         // }
         // app.Dictation.updateLesson(that.data.id, wordList, function (res) {
         //   that.setData({
@@ -553,10 +591,10 @@ Page({
       }
       //从自定义跳转过来
       if (that.data.navigation_type === "custom") {
-        if (that.data.id === 0) {
+        if (that.data.lesson_id === null) {
           app.Dictation.addLesson(wordList, function (res) {
             that.setData({
-              id: res.data.userLessonId,
+              lesson_id: res.data.userLessonId,
               // originWord: res.data.wordlist
             })
             console.log("custom success");
@@ -570,8 +608,8 @@ Page({
           // })
           // originWordString = originWordString.join(";");
           // if (wordList == originWordString) {
-            templateJs.goPlay(that.data.id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
-            return true;
+          templateJs.goPlay(that.data.lesson_id, that.data.lesson_name, that.data.navigation_type, that.data.book_id, that.data.book_name);
+          return true;
           // }
           // app.Dictation.updateLesson(that.data.id, wordList, function (res) {
           //   console.log("update success");
@@ -630,7 +668,7 @@ Page({
     this.setData({
       words: newWords
     })
-    app.Dictation.AddUserLessonWord(that.data.id, that.data.del_words[index].dictation_word, function (res) {})
+    app.Dictation.AddUserLessonWord(that.data.lesson_id, that.data.del_words[index].dictation_word, function (res) { })
     var newDelWords = this.data.del_words;
     newDelWords.splice(index, 1);
     if (newDelWords.length === 0) {
@@ -656,7 +694,7 @@ Page({
     this.setData({
       words: newWords
     })
-    app.Dictation.AddUserLessonWord(that.data.id, that.data.share_words[index].dictation_word, function (res) { })
+    app.Dictation.AddUserLessonWord(that.data.lesson_id, that.data.share_words[index].dictation_word, function (res) { })
     var newShareWords = this.data.share_words;
     newShareWords.splice(index, 1);
     if (newShareWords.length === 0) {
@@ -678,7 +716,7 @@ Page({
     var that = this;
     var wordindex = e.currentTarget.dataset.index;
     //发出请求删除词语
-    app.Dictation.delWordById(that.data.words[wordindex].id,that.data.id,function(res){});
+    app.Dictation.delWordById(that.data.words[wordindex].id, that.data.lesson_id, function (res) { });
     //比较标准单词
     this.data.standard_words.forEach(function (value, index, input) {
       if (that.data.standard_words[index].dictation_word === that.data.words[wordindex].dictation_word) {
@@ -703,11 +741,31 @@ Page({
   play: function (e) {
     if (this.data.canPlay) {
       var that = this;
+      // console.log(e)
       var index = e.currentTarget.dataset.index;
-      console.log(that.data.words[index].word_mp3_url);
-      wx.playBackgroundAudio({
-        dataUrl: that.data.words[index].word_mp3_url,
-      })
+      var lessonId = that.data.lesson_id;
+      if (that.data.words[index].word_mp3_url) {
+        wx.playBackgroundAudio({
+          dataUrl: that.data.words[index].word_mp3_url,
+        })
+       
+      }else {
+        if (that.data.words[index].id){
+          app.Dictation.getWordMp3Url(lessonId, that.data.words[index].dictation_word, that.data.words[index].id, 1, function (res) {
+            wx.playBackgroundAudio({
+              dataUrl: res.mp3Url,
+            })
+          })
+        }else {
+          app.Dictation.getLessonWord(that.data.lesson_id, function (res) {
+            that.setData({
+              words: res.data.wordlist
+            })
+            that.play(e)
+          })
+        }
+        
+      }
     }
   },
   //长按出现删除按钮
@@ -753,7 +811,7 @@ Page({
     if (that.data.unlock == "loading") {
       app.Dictation.ifAssess(that.data.uid, that.data.lesson_id, function (res) {
         // console.log(res);
-        that.setData({ unlock: res.data.unlock });
+        that.setData({ unlock: res.data.data.unlock });
       })
     } else {
       if (!that.data.unlock) {
@@ -787,20 +845,7 @@ Page({
   },
   openAllBook: function () {
     var that = this;
-    that.setData({ goPayDetail: true, showKey: false })
-  },
-
-  closePayBox: function () {
-    let that = this;
-
-    that.setData({ goPayDetail: false, showKey: false })
-  },
-  immediatePay: function (event) {
-    let that = this;
-    if (that.data.goTap) {
-      return;
-    }
-    that.setData({ goTap: true });
+    // that.setData({ goPayDetail: true,  });
     app.Dictation.fastBuySeed(that.data.uid, that.data.book_id, 0, function (rts) {
       // console.log("当前书的课程回调成功");
       // console.log(rts);
@@ -818,13 +863,13 @@ Page({
             // console.log("支付成功啦");
             // that.data.canView = true;
             that.gotoNext();
-            that.setData({ goPayDetail: false, goTap: false });
+            that.setData({ showKey: false });
           },
           'fail': function (res) {
             //支付失败
             // console.log("支付失败");
             // that.setData({ goTap: false });
-            that.setData({ goPayDetail: false, showKey: false });
+            that.setData({ showKey: true });
           }
         }
         );
@@ -835,4 +880,47 @@ Page({
     var that = this;
     that.setData({ showKey: false, ifDefaultTouch: "promiseTouch" })
   }
+
+  // closePayBox: function () {
+  //   let that = this;
+
+  //   that.setData({ goPayDetail: false, showKey: false })
+  // },
+  // immediatePay: function (event) {
+  //   let that = this;
+  //   if (that.data.goTap) {
+  //     return;
+  //   }
+  //   that.setData({ goTap: true });
+  //   app.Dictation.fastBuySeed(that.data.uid, that.data.book_id, 0, function (rts) {
+  //     // console.log("当前书的课程回调成功");
+  //     // console.log(rts);
+  //     wx.requestPayment
+  //       (
+  //       {
+  //         'timeStamp': rts.data.timeStamp,
+  //         'nonceStr': rts.data.nonceStr,
+  //         'package': rts.data.package,
+  //         'signType': rts.data.signType,
+  //         'paySign': rts.data.paySign,
+  //         'success': function (res) {
+  //           //支付成功
+  //           // console.log(res);
+  //           // console.log("支付成功啦");
+  //           // that.data.canView = true;
+  //           that.gotoNext();
+  //           that.setData({ goPayDetail: false, goTap: false });
+  //         },
+  //         'fail': function (res) {
+  //           //支付失败
+  //           // console.log("支付失败");
+  //           // that.setData({ goTap: false });
+  //           that.setData({ goPayDetail: false, showKey: false });
+  //         }
+  //       }
+  //       );
+  //     // console.log(rts);
+  //   });
+  // },
+
 })

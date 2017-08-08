@@ -1,20 +1,21 @@
 <!--pages/unit/unit.wxml-->
- <import src="../template/template.wxml" />
-<view class="{{font}} viewBox-{{ifDefaultTouch}}" catchtap="deleteCancel" >
+<import src="../template/template.wxml" />
+<view class="{{font}} viewBox-{{ifDefaultTouch}}" catchtap="deleteCancel">
   <view class="word-block">
     <block wx:if='{{uid}}'>
-    	<view class="unit-title f2">{{lesson_name}}</view>
-	    <view class="word-container">
-	      <view class="word-{{item.is_standard}} f5" wx:for="{{words_show}}" data-index="{{index}}" wx:key="id" catchtap="play" catchlongtap="longTapDelete">
-	        {{item.dictation_word}}
-	        <view wx:if="{{isEdit}}" class="delete" data-index="{{index}}" catchtap="deleteWord">
-	          <view class="delete-line"></view>
-	        </view>
-	      </view>
-	    </view>
+      <!-- <view class="unit-title f2">{{lesson_name}}</view> -->
+      <view class="word-container">
+        <view class="word-{{item.is_standard}} f5" wx:for="{{words_show}}" data-index="{{index}}" wx:key="id" catchtap="play" catchlongtap="longTapDelete">
+          {{item.dictation_word}}
+          <view wx:if="{{isEdit}}" class="delete" data-index="{{index}}" catchtap="deleteWord">
+            <view class="delete-line"></view>
+          </view>
+        </view>
+        <view class="word-1 f5" bindtap="editShow">+</view>
+      </view>
     </block>
     <block wx:else>
-    	<view class="noData">正在加载中......</view>
+      <view class="noData">正在加载中......</view>
     </block>
   </view>
   <view class="words-count">共{{words_number}}个词汇</view>
@@ -36,28 +37,30 @@
   </view>
   <view class="bottom-block"></view>
 
-  <view class="input-area-{{input_area_display}}">
-    <image src="../../images/book/cancel.png" class="cancel-icon" bindtap="editHide"></image>
-    <form class="form" bindreset="sendWords">
-      <input placeholder-class="phcolor" name="words" type="text" class="input-text f3" bindinput="inputWord" cursor-spacing="10" focus="{{focus}}" placeholder="听，听写的听" maxlength="100" />
-      <button class="send-button" form-type="reset">发送</button>
-    </form>
+  <view wx:if="{{input_area_display}}">
+    <view class="input-area-show">
+      <!-- <image src="../../images/book/cancel.png" class="cancel-icon" bindtap="editHide"></image> -->
+      <form class="form" bindreset="sendWords">
+        <textarea fixed="true" auto-height placeholder-class="phcolor" name="words" type="text" class="input-text f3" bindinput="inputWord" bindfocus="inputFocus" bindblur="inputBlur" cursor-spacing="10" focus="{{focus}}" placeholder="词汇用分号隔开，逗号用于解释或翻译" maxlength="100" />
+        <button class="send-button" form-type="reset">发送</button>
+      </form>
+    </view>
   </view>
-  <view class="more-{{button_display}}" bindtap="editShow">
+  <!-- <view class="more-{{button_display}}" bindtap="editShow">
     <image src="../../images/book/edit.png" class="edit-icon"></image>
-  </view>
+  </view> -->
   <block wx:if="{{showKey&&!goPayDetail}}">
-    <template is="Buy" data="{{key_rest_count:key_rest_count}}"></template>
-  </block> 
-  <block wx:if="{{goPayDetail}}">
-    <template is="OrderDetail" data="{{money:money,bookOrUnitName:bookOrUnitName,book_name:book_name,Name:Name,resourceNum:resourceNum,goTap:goTap}}"></template>
+    <template is="Buy" data="{{money:money,key_rest_count:key_rest_count}}"></template>
   </block>
+  <!-- <block wx:if="{{goPayDetail}}">
+    <template is="OrderDetail" data="{{money:money,bookOrUnitName:bookOrUnitName,book_name:book_name,Name:Name,resourceNum:resourceNum,goTap:goTap}}"></template>
+  </block> -->
   <!-- <view class="start-button-{{button_display}}" bindtap="gotoNext">
   </view> -->
   <view class="startButton-{{button_display}}" bindtap="toKeyOrLesson">
-       <image src="../../images/word/beginLesson.png" mode="widthFix"></image> 
+    <image src="../../images/word/beginLesson.png" mode="widthFix"></image>
   </view>
-  </view>
-  <!--loading  -->
+</view>
+<!--loading  -->
 <import src="../template/template.wxml" />
 <template is="pageLoading" data="{{isLoading}}"></template>

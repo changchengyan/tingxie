@@ -11,13 +11,17 @@ Page({
       count: 0,
       list: []
     },
-    grade: "选年级",
+    grade: "",
     index:1,
-    imgHeight: 0,
     font: app.globalData.font,
     nodouble: true,
     // 修改样式的数据
-    grade_listBox: "not_show"
+    grade_listBox: "not_show",
+    loadding:false,
+    size:12,
+    loadMore:true,
+    gradeArr:['一年级','二年级','三年级','四年级','五年级','六年级'],
+    bookJson:{}
   },
 
   /**
@@ -25,25 +29,96 @@ Page({
    */
   onLoad: function (options) {
     const that = this;
-    (function () {
-      let index = that.data.index,
-        grade = "",
-        size = 21;
-      // console.log(grade);
-      app.Dictation.searchBook(grade, index, size, function (res) {
-        let data = that.data.book.list.concat(res.data);
-        index += 1;
-        // console.log(index);
-        that.setData({
-          book: {
-            count: 2,
-            list: data
-          },
-          index: index,
-          grade_listBox: "not_show"
-        })
+    // that.setData({grade:'',index:1,size:12,bookJson:{}})
+    that.loadBookList();
+  },
+  loadBookList:function(){
+      //首次加载
+      //上拉加载更多
+      //下来全部刷新
+      var that = this;
+       //有必要加载更多，且没在请求加载中
+      if(that.data.loadMore && !that.data.loadding)
+      {        
+          //if(getApp().globalData.weixinUserInfo.uid>0)
+          //{       	
+              that.setData({loadding:true});
+              app.Dictation.searchBook
+              (
+              	that.data.grade,
+              	that.data.index,
+              	that.data.size,
+                  function(res)
+                  {                  
+                      if(res.data.length>0)
+                      {
+                          //追加数据
+                          that.data.book.count = res.data.length*1 + that.data.book.count*1;
+                        that.data.book.list = that.data.book.list.concat(res.data);
+                          //填充数据                         
+                          for(var i=0;i<res.data.length;i++) {
+                            
+                            if(res.data[i].book_pic == "") {
+                                //res.data[i].book_pic = "../images/no_image.png"
+                            }
+                          }
+                          
+                          that.setData({
+                            book:that.data.book,
+                            index: res.pageIndex + 1
+                          });
+                          for(var i=0;i<res.data.length;i++){
+                          	for(var j=0;j<that.data.gradeArr.length;j++){
+                          		if(res.data[i].book_grade==that.data.gradeArr[j]){
+                          			if(that.data.bookJson[that.data.gradeArr[j]]){
+                          				that.data.bookJson[that.data.gradeArr[j]].push(res.data[i]);
+                          			}else{
+                          				that.data.bookJson[that.data.gradeArr[j]]=[];
+                          				that.data.bookJson[that.data.gradeArr[j]].push(res.data[i]);
+                          			}
+                          			
+                          		}
+                          	}
+                          }
+                          that.setData({bookJson:that.data.bookJson})
+                      }
+                      //如果不够12条，标记不用再加载更多
+                      if(that.data.book.count==res.totalCount)
+                      {
+                          that.setData({loadMore:false});
+                      }
+                      that.setData({loadding:false});
+                      wx.stopPullDownRefresh();
+                  }
+              );
+
+          //}
+          //else
+          //{
+            //setTimeout(that.loadBookList,100);
+          //}
+      }  	
+  	
+  },
+  onPullDownRefresh: function(){
+    
+    if(this.data.loadding){
+    	return;
+    }else{
+    	//先清空数据再加载
+    	var book = {count:0,list:[]};
+	    this.setData({
+        book:book,
+        loadding: false,
+        size: 12,
+        loadMore: true,
+        bookJson: {}
       });
-    })();
+	    //加载
+	    this.loadBookList();
+    }
+    
+    
   },
 
   /**
@@ -57,13 +132,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    var screenInfo = wx.getSystemInfoSync();
-    var screenWidth = screenInfo.windowWidth;
-    var itemWidth = ((screenWidth - 20) / 3 - 20) * 1.3
-    this.setData({
-      imgHeight: itemWidth
-      // grade_list: "grade_list"
-    });
   },
 
   /**
@@ -79,14 +147,6 @@ Page({
   onUnload: function () {
   
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
   /**
    * 页面上拉触底事件的处理函数
    */
@@ -106,101 +166,44 @@ Page({
     const that = this;
     switch(e.target.id){
       case "grade1":
-        that.setData({
-          grade: "一年级", index: 1, 
-          book:
-            {
-              count: 0,
-              list: []
-            } });
-        that.getBook();
+        that.setData({grade: "一年级"});
         break;
       case "grade2":
-        that.setData({
-          grade: "二年级", index: 1, 
-          book:
-            {
-              count: 0,
-              list: []
-            } });
-        that.getBook();
+        that.setData({grade: "二年级"});
         break;
       case "grade3":
-        that.setData({
-          grade: "三年级", index: 1, 
-          book:
-            {
-              count: 0,
-              list: []
-            }, });
-        that.getBook();
+        that.setData({grade: "三年级"});
         break;
       case "grade4":
-        that.setData({ 
-          grade: "四年级", index: 1,
-          book:
-          {
-            count: 0,
-            list: []
-          } });
-        that.getBook();
+        that.setData({grade: "四年级"});
         break;
       case "grade5":
-        that.setData({ 
-          grade: "五年级", index: 1,
-          book:
-          {
-            count: 0,
-            list: []
-          } });
-        that.getBook();
+        that.setData({grade: "五年级"});
         break;
       case "grade6":
-        that.setData({ 
-          grade: "六年级", index: 1,
-          book:
-          {
-            count: 0,
-            list: []
-          } });
-        that.getBook();
+        that.setData({grade: "六年级"});
         break;
     }
-  },
-
-  //按年级获取课本
-  getBook: function () {
-    const that = this;
-    let index = that.data.index,
-        grade = that.data.grade,
-        nodouble = that.data.nodouble,
-        size = 21;
-    if(!nodouble) 
-    {
-      return false;
+    if(!that.data.nodouble){
+    	return false;
+    }else{
+    	that.setData({
+    		index:1,
+    		loadding:false,
+    		size:12,
+    		loadMore:true,
+    		book:{count:0,list:[]},
+    		grade_listBox:'not_show',
+    		nodouble:false,
+    		bookJson:{}
+    	});
+    	setTimeout(function () { 
+    		that.setData({nodouble:true})
+    	}, 500)
+    	that.loadBookList();   	
     }
-    else
-    {
-      that.setData({nodouble:false});
-    }
-    (grade === "选年级")?grade="":grade=grade;
-    // console.log(grade);
-    app.Dictation.searchBook(grade, index, size, function (res) {
-      let data = that.data.book.list.concat(res.data);
-      index+=1;
-      // console.log(index);
-      that.setData({
-        book: {
-          count: 2,
-          list: data
-        },
-        index:index,
-        grade_listBox: "not_show",
-        nodouble: true
-      })
-    });
+    
   },
-
   // 显示或者隐藏年级列表
   showGradeList: function () {
     const that = this;
@@ -235,5 +238,72 @@ Page({
         app.Dictation.getBookByShare(book_id);
 
       }
+  },
+
+  //扫码添加书籍
+  bindStartScan: function (event) {
+    var that = this;
+    that.setData({ add_book_way: "not_show" });
+    wx.scanCode
+      ({
+        success: (res) => {
+          app.Dictation.addBookByISBN
+            (
+            res.result,
+            function (resbook) {
+              if (resbook.data.success) {
+                console.log(resbook.data.data);
+                //把返回的数据插入到数组，放在第一个
+                var resdata = resbook.data;
+                var bookdata = that.data.book;
+                var booklist = bookdata.list;
+                var push = true;
+                for (var i = 0; i < bookdata.list.length; i++) {
+                  if (bookdata.list[i].id * 1 == resdata.data.id * 1) {
+                    push = false;
+                    that.swapArray(booklist, i);
+                    that.setData({ book: bookdata });
+
+                    break
+                  }
+
+                }
+
+                if (push) {
+                  var node =
+                    [
+                      {
+                        book_name: resdata.data.book_name,
+                        book_pic: resdata.data.book_pic,
+                        id: resdata.data.id
+                      }
+                    ];
+
+                  var loadLastId = that.data.loadLastId + 1;
+                  bookdata.count++;
+                  bookdata.total_count++;
+                  bookdata.list = node.concat(booklist);
+
+                  that.setData({
+                    book: bookdata,
+                    loadMore: true,
+                    loadLastId: loadLastId
+                  });
+                }
+
+
+                //that.loadBookList();
+
+                wx.navigateTo({ url: '../book/book?book_id=' + resdata.data.id });
+
+              }
+              // 数据库中没有该书记提示用户自定义听写
+              else {
+                wx.navigateTo({ url: '../nobook/nobook' });
+              }
+            }
+            );
+        }
+      });
   }
 })

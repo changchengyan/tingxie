@@ -1,20 +1,23 @@
 /* pages/desktop/desktop.wxss */
 @import "../template/template.wxss";
+
 /*index页样式  */
-.index_container{
+
+/* .index_container {
   display: flex;
   flex-flow: column nowrap;
   z-index: 50;
 }
 
-.not_show{
+.not_show {
   display: none;
 }
 
 .userinfo {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
+
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -34,27 +37,29 @@
   margin-top: 200px;
 }
 
-.intro{
+.intro {
   margin-top: 87rpx;
 }
 
-.margintop_284{
+.margintop_284 {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   margin-top: 284rpx;
 }
 
-.now_personNum{
+.now_personNum {
   margin-top: 52rpx;
   align-self: center;
-}
+} */
+
 /*书桌样式  */
-.container{
+
+.container {
   display: block;
 }
 
-view{
+view {
   box-sizing: border-box;
 }
 
@@ -62,7 +67,7 @@ view{
   height: 100%;
   width: 100%;
   position: absolute;
-  background-color: #EBF4F3;
+  background-color: #e8e8e8;
 }
 
 .flex-body {
@@ -98,23 +103,11 @@ view{
   height: 210px;
 }
 
-/* 添加书籍的方式 */
-.add_book_way{
-  position: absolute;
-  right: 0;
-  color: #eee;
-  background-color: #74b7d7;
-}
-
-.add_book_way view{
-  width: 300rpx;
-  height: 80rpx;
-  font-size: 16px;
-  line-height: 80rpx;
-  border-bottom: 1px solid #ccc;
-}
-.add_book_way view:last-of-type{
-  border: none;
+.user-count-info {
+  padding: 20px 0px 20px 0px;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
 }
 
 .flex-body .book-desk {
@@ -126,65 +119,48 @@ view{
 }
 
 .book-add-area {
-  height: 50pt;
-  background-color: #1FC784;
+  height: 138rpx;
+  background-color: #dafaf4;
   text-align: center;
   position: fixed;
   z-index: 2;
   top: 0px;
   left: 0px;
   width: 100%;
-  display:flex;
-  justify-content:space-between;
-  padding:0 15px;
-  align-items:center;
-  
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  align-items: center;
 }
 
 .book-add-area .book-count {
-  float: left;
   color: #fff;
 }
-.f-book-count{
-    font-size: 30px ;
+
+.f-book-count {
+  font-size: 30px;
 }
+
+.f-book-count image{
+  width: 175rpx;
+  height: 88rpx;
+}
+
 .book-add-area .book-scan {
-  float: right;
   text-align: center;
 }
 
- .book-add-area .book-scan .icon {
-   position: relative;
-  width: 80rpx;
-  height: 80rpx;
-  border: 1px solid #fff;
-  border-radius: 50%;
-} 
-
-.book-add-area .book-scan .icon::before{
-  position: absolute;
-  top: 50%;
-  left: 19rpx;
-  content: "";
-  width: 40rpx;
-  height: 0;
-  border-top: 1rpx solid #fff;
+.book-scan image {
+  width: 115rpx;
+  height: 92rpx;
+  display:block;
 }
 
-.book-add-area .book-scan .icon::after{
-  position: absolute;
-  top: 50%;
-  left: 19rpx;
-  content: "";
-  width: 40rpx;
-  height: 0;
-  transform: rotate(90deg);
-  border-top: 1rpx solid #fff;
-}
 /*.book-count .text{
   font-size: 14px;
   line-height: 18px;
 }*/
+
 .book-add-area .book-scan .text {
   padding: 3px 0px 0px 0px;
   font-size: 12px;
@@ -193,25 +169,56 @@ view{
 }
 
 .book-add-area-visibility {
-  height: 50pt;
+  height: 138rpx;
   text-align: center;
   padding: 20pt 0pt 0pt 0pt;
   color: #999;
 }
+
+/* 添加书籍的方式 */
+
+/* .add_book_way {
+  position: absolute;
+  right: 0;
+  color: #eee;
+  background-color: #74b7d7;
+}
+
+.add_book_way view {
+  width: 300rpx;
+  height: 80rpx;
+  font-size: 16px;
+  line-height: 80rpx;
+  border-bottom: 1px solid #ccc;
+}
+
+.add_book_way view:last-of-type {
+  border: none;
+}*/
+.app_desc {
+  padding: 20px 0px 30px 0px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 28px;
+  color: #4bc29a;
+} 
+
 /*书架为空的样式  */
-.nobook_container{
+
+.nobook_container {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: center;
 }
-.tadpole{
-  margin: 187rpx 0 96rpx 0; 
+
+.tadpole {
+  margin: 187rpx 0 96rpx 0;
   width: 144rpx;
   height: 87rpx;
 }
 
-.add_book{
+.add_book {
   margin-top: 40rpx;
   width: 300rpx;
   height: 80rpx;
@@ -219,7 +226,7 @@ view{
   color: #eee;
   line-height: 80rpx;
   text-align: center;
-  background-color: #1FC784;
+  background-color: #4bc29a;
   border-radius: 10rpx;
 }
 
@@ -234,7 +241,16 @@ view{
   align-items: flex-start;
   align-content: flex-start;
   width: 100%;
-  min-height: calc(100% - 50pt - 60rpx);
+  /* min-height: calc(100% - 40rpx); */
+  
+}
+.bookWrap{
+  min-height:calc(100% - 138rpx); 
+	position:relative;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  z-index: 1;
 }
 
 .book-list .item .item-delete {
@@ -248,7 +264,7 @@ view{
 
 .book-list .item .item-delete image {
   width: 30px;
-  height:30px;
+  height: 30px;
 }
 
 .book-list .item {
@@ -286,13 +302,44 @@ view{
   background-size: 100% auto;
 }
 
+.wave{
+	width:262rpx;
+	height:228rpx;
+	position:absolute;
+	background:url(http://image.chubanyun.net/images/Dictation/desktop/wave.png) no-repeat;
+	
+	z-index:-1;
+}
+.wave1{
+	left:350rpx;
+	bottom:260rpx;
+	background-size:contain;
+}
+.wave2{
+	width:131rpx;
+	height:114rpx;
+	left:0;
+	bottom:0;
+	background-size:200%;
+	background-position:right top;
+
+}
+.wave3{
+	width:131rpx;
+	height:228rpx;
+	right:0;
+	bottom:25rpx;
+	background-size:200%;
+}
+
 /* .bottom_block{
   width: 100%;
   height: 88rpx;
 } */
 
 /**是否确认删除**/
-.to-sure-del-btn{
+
+.to-sure-del-btn {
   position: fixed;
   top: 0;
   left: 0;
@@ -342,7 +389,7 @@ view{
   border-right: 1px solid #ddd;
 }
 
-.first_login{
+.first_login {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
@@ -355,18 +402,18 @@ view{
   z-index: 15;
 }
 
-.img_director{
+.img_director {
   align-self: flex-end;
   margin: 14rpx 37rpx 24rpx 0;
   width: 350rpx;
   height: 376rpx;
 }
 
-.first_login text{
+.first_login text {
   align-self: center;
 }
 
-.iknow{
+.iknow {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -378,21 +425,21 @@ view{
   border-radius: 20rpx;
 }
 
-
 /* 底部留白 */
- .copyright{
+
+.copyright {
   display: block;
   padding: 10rpx 0;
   width: 100%;
   height: 40rpx;
   font-size: 12px;
   line-height: 40rpx;
-  color: #ccc;
+  color: #bbb;
   text-align: center;
-  background-color: #EBF4F3;
-} 
+}
 
 /*自定义书籍样式  */
+
 /* .selfbook_up{
   display: flex;
   flex-flow: column nowrap;

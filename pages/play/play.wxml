@@ -19,10 +19,10 @@
     <!--播放信息-->
     <scroll-view scroll-y class="container">
       <view class="current-wrap ">
-      <block wx:if="{{showWord&&currentWord.display_word.length<100}}">
+      <block wx:if="{{showWord&&currentWord.display_word.length<=88}}">
         <view class="current-word-onlyLine" >{{currentWord.display_word}}</view>
       </block>
-      <block wx:if="{{showWord&&currentWord.display_word.length===100}}">
+      <block wx:if="{{showWord&&currentWord.display_word.length>88}}">
         <view class="current-word-moreLine" >{{currentWord.display_word}}</view>
       </block>
       <block wx:if="{{!showWord}}">
