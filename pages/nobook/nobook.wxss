@@ -19,7 +19,7 @@
   color: #eee;
   line-height: 80rpx;
   text-align: center;
-  background-color: #50e4a9;
+  background-color: #06c1ae;
   border-radius: 10rpx;
 }
 /* .selfbook_btn{

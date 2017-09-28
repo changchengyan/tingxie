@@ -1,6 +1,7 @@
 {
   "backgroundTextStyle": "light",
-  "navigationBarBackgroundColor": "#111111",
+  "navigationBarBackgroundColor": "#06C1AE",
   "navigationBarTitleText": "RAYS听写",
-  "navigationBarTextStyle": "white"
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#e3fddb"
 }

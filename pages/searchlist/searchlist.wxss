@@ -1,36 +1,70 @@
 /* searchlist.wxss */
 
+.proLoad {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .list-top {
   position: fixed;
   top: 0px;
   left: 0px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 20rpx;
+  align-items: flex-start;
+  align-content:flex-start;
+  padding: 0 35rpx;
   width: 100%;
-  height: 50pt;
-  color: #666;
-  font-size: 16px;
-  line-height: 50pt;
-  background-color: #dafaf4;
+  height: 268rpx;
+  background-color: #06c1ae;
   z-index: 1;
 }
-.list-top-area{
+.list-top view{
+	width:200rpx;
+	height:74rpx;
+	line-height:74rpx;
+	border:1px solid #fff;
+	border-radius:40rpx;
+	color:#fff;
+	font-size:18px;
+	text-align:center;
+	margin-top:40rpx;
+}
+.list-top view.active{
+	background:#fff;
+	color:#06c1ae;
+}
+.list-top-area {
   width: 100%;
-  height: 50pt;
-}
-/* 
-.list-top .title {
+  height: 268rpx;
 }
 
-.list-top .scan {
-} 
-*/
+.list-top .classification, .list-top .scan {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+  height: 162rpx;
+  padding: 30rpx 0 30rpx 0;
+}
 
-.searchBox {
+.list-top .classification image, .list-top .scan image {
+  width: 52rpx;
+  height: 53rpx;
+}
+
+.searchBox-show {
   height: 100%;
+}
+
+.searchBox-hidden {
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .grade_listBox {
@@ -62,30 +96,64 @@
   flex-flow: column nowrap;
   align-items: center;
   /* margin: 200rpx auto 0 auto; */
-  padding: 100rpx 0;
+  padding: 0 0 70rpx 0;
   width: 600rpx;
-  background-color: #eee;
+  background-color: #fff;
   border-radius: 12rpx;
   z-index: 5;
+}
+
+.title_bg {
+  padding-top: 75rpx;
+  width: 100%;
+  height: 250rpx;
+  text-align: center;
+  background: url(http://image.chubanyun.net/images/Dictation/searchlist/title_bg.png) no-repeat;
+  background-size: cover;
+}
+
+.title_bg text {
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
 }
 
 .list {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  width: 540rpx;
+  width: 480rpx;
 }
 
-.list view {
-  width: 245rpx;
-  height: 80rpx;
+.grade {
+  width: 210rpx;
+  height: 69rpx;
   margin-top: 40rpx;
-  font-size: 16px;
-  line-height: 80rpx;
+  font-size: 15px;
+  line-height: 69rpx;
   text-align: center;
-  background-color: #fff;
-  border: 1rpx solid #333;
-  border-radius: 6rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/searchlist/grade.png) 0 0 no-repeat;
+  background-size: contain;
+}
+
+.grade:active {
+  background: url(http://image.chubanyun.net/images/Dictation/searchlist/grade_checked.png) 0 0 no-repeat;
+  background-size: contain;
+}
+
+.grade_checked {
+  width: 210rpx;
+  height: 69rpx;
+  margin-top: 40rpx;
+  font-size: 15px;
+  line-height: 69rpx;
+  text-align: center;
+  background: url(http://image.chubanyun.net/images/Dictation/searchlist/grade_checked.png) 0 0 no-repeat;
+  background-size: contain;
+}
+
+#grade7 {
+  margin: 40rpx 135rpx 0 135rpx;
 }
 
 /*书籍列表  */
@@ -99,10 +167,11 @@ view {
 }
 
 .page-list {
-  height: 100%;
+
   width: 100%;
   position: relative;
-  background-color: #e8e8e8;
+  background-color: #f8f8f8;
+
 }
 
 .choose_grade {
@@ -165,6 +234,7 @@ view {
 }
 
 .book-list .item .text-view {
+  margin-top: 15rpx;
   font-size: 12px;
   line-height: 15px;
   color: #777;
@@ -174,32 +244,80 @@ view {
   background-size: 100% auto;
 }
 
+.book_publish_brief {
+  position: absolute;
+  top: 20rpx;
+  left: 5px;
+  width: 100rpx;
+  padding: 4rpx 0;
+  text-align: center;
+  border-bottom-right-radius: 19rpx;
+  border-top-right-radius: 19rpx;
+  background-color: rgba(246, 134, 51, 0.9);
+}
+
 .exiting {
   position: absolute;
   bottom: 0;
-  padding: 8rpx;
+  padding: 10rpx 0;
   width: 100%;
-  color: #666;
+  color: #fff;
   text-align: center;
-  background-color: #4bc29a;
+  background-color: #06c1ae;
 }
-.grade{
-	text-align:center;
-	padding-top:20rpx;
+
+.grade_name {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
   font-weight: bold;
 }
-.publishing{
-	padding:10rpx 0;
-	display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items:center;
+
+.grade_name view:first-child {
+  width: 20rpx;
+  height: 20rpx;
+  margin-right: 20rpx;
 }
-.publishing .dot{
-	width:6rpx;
-	height:6rpx;
-	background:#777;
+
+.grade0 {
+  background-color: #78c8e6;
 }
-.publishing .text{
-	padding:0 20rpx;
+
+.scanBookList {
+  background-color: rgb(231, 40, 28);
 }
+
+.grade1 {
+  background-color: #00cc0a;
+}
+
+.grade2 {
+  background-color: #ffe349;
+}
+
+.grade3 {
+  background-color: #ff895b;
+}
+
+.grade4 {
+  background-color: #7c94be;
+}
+
+.grade5 {
+  background-color: #f26797;
+}
+
+/*isbnList  */
+
+.isbn-list {
+}
+
+ .no_more {
+  width: 100%;
+  padding: 20rpx 0;
+  text-align: center;
+  color: #676767;
+  font-size: 28rpx
+} 

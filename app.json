@@ -7,14 +7,13 @@
     "pages/logs/logs",
     "pages/play/play",
     "pages/template/template",
-    "pages/word/word",
     "pages/unit/unit",
-    "pages/word/details/details",
-    "pages/finally/finally"
+    "pages/word/word",
+    "pages/word/details/details"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4bc29a",
+    "navigationBarBackgroundColor": "#06c1ae",
     "navigationBarTitleText": "听写100",
     "navigationBarTextStyle": "light"
   }

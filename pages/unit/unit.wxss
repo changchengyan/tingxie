@@ -1,32 +1,51 @@
 /* pages/word/word.wxss */
 @import "../template/template.wxss";
-.phcolor{
+
+.scroll-view-item{
+	height:150px;
+}
+
+.phcolor {
   color: #ddd;
+}
+
+button::after {
+  border: none;
+}
+.pinyin{
+	font-size:12px;
 }
 page {
   height: 100%;
 }
+
 view, input {
   box-sizing: border-box;
 }
 
 .viewBox-promiseTouch {
-  min-height: 100%;
-  background-color: #f6e5ac;
-}
-.viewBox-defaultTouch{
   height: 100%;
-  overflow: hidden;
-   background-color:#f6e5ac; 
+  background-color: #fff;
+}
 
+.viewBox-defaultTouch {
+  height: 100vh;
+  overflow: hidden;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
-.noData{
-	text-align:center;
-	color:#fff;
-	line-height:40rpx;
-	font-size:14px;
-	padding-top:10px;	
+
+.noData {
+  text-align: center;
+  color: #fff;
+  line-height: 40rpx;
+  font-size: 14px;
+  padding-top: 10px;
 }
+
 .unit-title {
   margin: 0 40rpx 0 40rpx;
   padding-top: 60rpx;
@@ -34,40 +53,93 @@ view, input {
   text-align: center;
 }
 
+.top-style {
+  font-size: 28rpx;
+  line-height: 60rpx;
+  display: flex;
+  /* flex-direction: row;
+  justify-content: center;
+  align-items: center; */
+  /* height: 150rpx; */
+  justify-content: space-between;
+  padding: 0 50rpx;
+  background: #c7fbb7;
+  color: #666;
+}
+
+.top-word {
+  width: 60%;
+  justify-content: center;
+}
+.hiddenSelf{
+	font-size:22px;
+  padding-left:40rpx
+}
+
 .word-container {
   display: flex;
   flex-flow: row wrap;
   padding: 0 40rpx 0 10rpx;
+  align-items:stretch;
 }
 
 .word-container .word-1 {
-  display: inline;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
   max-width: 670rpx;
-  padding: 14rpx 40rpx;
+  padding: 6rpx 40rpx 10rpx;
   margin: 30rpx 0 0 30rpx;
-  /* border: 1px solid #eee; */
-  border-radius: 30rpx;
-  box-shadow: 5rpx 11rpx #52bd92;
+  border-radius: 37rpx;
   color: #fff;
-  font-weight: bold;
-  background: #a3df55;
+  font-weight: 600;
+  background: #06c1ae;
   word-break: break-all;
   position: relative;
+  text-align: center;
+  min-height:90rpx;
+  
+}
+.word-1 .pinyin {
+  font-size:12px;
+  margin-bottom: -12rpx;
+}
+.word-container .word-1:active {
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .word-container .word-0 {
   display: inline;
   max-width: 670rpx;
-  padding: 14rpx 40rpx;
+  padding: 6rpx 40rpx 10rpx;
   margin: 30rpx 0 0 30rpx;
-  /* border: 1px solid #eee; */
-  border-radius: 30rpx;
-  box-shadow: 5rpx 11rpx #52bd92;
+  border-radius: 37rpx;
   color: #fff;
-  font-weight: bold;
-  background: #febb2d;
+  font-weight: 600;
+  background: #febe29;
   word-break: break-all;
   position: relative;
+  display:flex;
+  align-items:center;
+	min-height:90rpx;
+	  
+}
+
+.word-container .word-add {
+  color: #ccc;
+  border: 6rpx dashed #ccc;
+  width: 114rpx;
+  line-height: 90rpx;
+  text-align: center;
+  font-size: 40px;
+  margin: 30rpx 0 0 30rpx;
+  border-radius: 40rpx;
+  align-self:center;
+}
+
+.word-container .word-0:active {
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .word-container .delete {
@@ -119,7 +191,6 @@ view, input {
   padding-top: 60rpx;
   font-size: 15px;
   color: #fff;
-  background: url(http://imglf0.nosdn.127.net/img/TkRpUWhnbGQwcUszZjh0NzRFeVNQdnJrelpQWjNsS1FTMy9WTmVKMDc3T1kzdFZqcFdTVWFnPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg);
   background-size: 100%;
 }
 
@@ -132,13 +203,17 @@ view, input {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 100%; 
-   /* display: flex;  */
-   /* align-items: center;  */
+  /* height: 100%; *//* display: flex;  *//* align-items: center;  */
   margin-top: 7rpx;
-  padding: 10rpx 28rpx;
-  border-top: 1px solid #d6d6d7;
-  background-color: #fff; 
+  padding: 33rpx 36rpx;
+  /* border-top: 1px solid #d6d6d7; */
+  background-color: #e3fddb;
+  height: 100vh;
+}
+
+.input-area-scroll {
+  width: 100%;
+  /* height: 100vh; *//* height:95vh; *//* min-height: 100vh; */
 }
 
 .input-area-show .cancel-icon {
@@ -148,30 +223,83 @@ view, input {
 }
 
 .input-area-show .input-text {
-  width:700rpx;
-  padding:25rpx 0;
-  /* float: left; */
-  /* width: 530rpx; */
-  /* height: 72rpx; */
-  /* padding: 0 10rpx; */
-  /* border: 1px solid #dbdbdb; */
-  /* border-radius: 5px; */
+  box-sizing: border-box;
+  width: 678rpx;
+  height: 60vh;
+  border: 1px solid #06c1ae;
+  border-radius: 15px;
+  padding: 40rpx 35rpx;
+  margin-top: 40rpx;
+  /* float: left; *//* width: 530rpx; *//* height: 72rpx; *//* padding: 0 10rpx; *//* border: 1px solid #dbdbdb; *//* border-radius: 5px; */
   background-color: #fff;
+  box-shadow: 0 3px 1px #d1e9ca;
   font-weight: 800;
 }
 
-.input-area-show .send-button {
+.input-head {
+  width: 100%;
+  height: 80rpx;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 102rpx;
-  height: 72rpx;
+}
+
+.input-title {
+  box-sizing: border-box;
+  height: 80rpx;
+  padding: 0 44rpx;
+  margin-right: 36rpx;
+  background-color: #fff;
+  border: 1px solid #06c1ae;
+  border-radius: 15px;
+  box-shadow: 0 3px 1px #d1e9ca;
+   width: 500rpx;
+}
+
+.input-count {
+  box-sizing: border-box;
+  /* width: 220rpx;
+  height: 80rpx; */
+  padding-top: 37rpx;
+  /* background: url(http://image.chubanyun.net/images/Dictation/book/cloud.png)no-repeat; */
+  /* background-size: 100%; */
+  text-align: center;
+  font-size: 36rpx;
+  color: #06c1ae;
+  font-weight: 700;
+}
+
+.button-block {
+  width: 100%;
+  margin-top: 32rpx;
+  display: flex;
+  bottom: 0;
+}
+
+.input-area-show .send-button {
+  width: 402rpx;
+  height: 91rpx;
   padding: 0;
-  border-radius: 5px;
-  background: url(http://image.chubanyun.net/images/Dictation/book/button_bg.png)no-repeat;
-  background-size: contain;
+  background: url(http://image.chubanyun.net/images/Dictation/book/finish.png)no-repeat;
+  background-size: 100%;
+  border-radius: 0;
+  border: none;
+  /* background: url(http://image.chubanyun.net/images/Dictation/book/button_bg.png)no-repeat; *//* background-size: contain; */
   font-size: 15px;
   color: #fff;
+  opacity: 1 !important;  
+}
+
+.back-button {
+  width: 227rpx;
+  height: 91rpx;
+  margin-right: 55rpx;
+  padding: 0;
+  background: url(http://image.chubanyun.net/images/Dictation/book/return.png)no-repeat;
+  background-size: 100%;
+  border-radius: 0;
+  border: none;
+  font-size: 15px;
+  color: #fff;
+  opacity: 1 !important;
 }
 
 .input-area-show .form {
@@ -201,29 +329,32 @@ view, input {
 }
 
 .words-del-title {
-  padding: 30rpx;
+  padding: 0rpx 30rpx 0rpx 30rpx;
   font-size: 15px;
+  text-align: center;
 }
 
 .words-del-container {
   display: flex;
   flex-flow: row wrap;
-  padding: 0 40rpx 0 10rpx;
+  padding: 0 40rpx 20rpx 10rpx;
 }
 
 .del-word {
-  display: inline;
+  display: flex;
+  flex-direction:column;
   max-width: 670rpx;
-  padding: 14rpx 35rpx;
+  padding: 10rpx 40rpx;
   margin: 30rpx 0 0 30rpx;
-  border: 1px solid #898989;
-  border-radius: 5px;
-  background: #b0b0b0;
-  color: #fff;
-  font-size: 15px;
-  font-weight: bold;
+  border-radius: 37rpx;
+  color: #999;
+  font-weight:600;
+  background: #fff;
   word-break: break-all;
   position: relative;
+  border: 1px solid #999;
+  text-align:center;
+  justify-content:center;
 }
 
 .bottom-block {
@@ -237,34 +368,146 @@ view, input {
   left: 0;
   width: 100vw;
   height: 168rpx;
-  box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08);
-  -webkit-box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.08); */
   z-index: 1;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-}
-.startButton-show:active {
-  box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.5);
-}
-
-.startButton-hide {
-  display: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 0 30rpx;
 }
 
 .startButton-show image {
-  width: 100vw;
+  width: 100%;
+  height: 100rpx
+}
+
+.startButton-hide {
+   display: none; 
+}
+
+.startButton-show .logo {
+  width: 100rpx;
+  height: 100rpx;
+  position: absolute;
+  top: 20%;
+  left: 7%;
+  z-index: 10
+}
+
+.startButton-show .star-dictation {
+  width: 380rpx;
+}
+
+.startButton-show .star-dictation:active {
+  box-shadow: 0px 8px 20px rgba(6, 193, 174, 0.5);
+  border-radius: 50rpx;
 }
 
 .word-block {
-  background: #50e4a9;
+  background: #fff;
+  height:100%;
+  box-sizing:border-box;
 }
-
+.bottom-block.pad{
+ padding-bottom:380rpx;
+ box-sizing:content-box;
+}
 .mask {
   position: fixed;
-  z-index: 1000;
-  background:rgba(0,0,0,0.5);
+  z-index:4;
+  background: rgba(0, 0, 0, 0.5);
   height: 100%;
   width: 100%;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
 }
+
+.case-show {
+  position: fixed;
+  width: calc(100% - 40rpx);
+  bottom: 178rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 30rpx;
+  z-index: 5;
+  margin: 0 20rpx;
+  box-shadow:1px 1px 16px rgba(0,0,0, 0.3);
+}
+.case-show .pinyin{
+	margin-bottom:-6rpx;
+}
+
+.case-content {
+  width: 100%;
+  height: 340rpx;
+  overflow:scroll;
+}
+
+.case-triangle {
+ width:0;
+height:0;
+border-top:25rpx solid #fff;
+border-left:15rpx solid transparent;
+border-right:15rpx solid transparent;
+position:absolute;
+left:10%;
+bottom:-19rpx;
+}
+.addAllShare{
+	color:#febe29;
+	border-bottom:1px solid #febe29;
+	display:inline-block;
+	white-space:nowrap;		
+}
+.begin{
+	position:relative;
+}
+/* 高频词汇展示 */
+/* .words-highFrequency{
+  width: 80%;
+  height:400rpx;
+  position: absolute;
+  bottom: 200rpx;
+  left:50%;
+  margin-left:-40%;
+  background: #fff;
+  border-radius: 10rpx;
+  color: #ccc;
+  padding: 20rpx;
+  padding-top:60rpx;
+}
+.tipsOfTittle{
+  width:100%;
+  padding:0 50rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+}
+.wrap-highFrequencyStyle{
+  width: 100%;
+  display:flex;
+  flex-flow:row wrap;
+  padding:0 40rpx 0 10rpx;
+  align-items:stretch;
+}
+.wrap-highFrequencyStyle .itemStyle-highFrequency{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+max-width:670rpx;
+padding:6rpx 40rpx 10rpx;
+margin:30rpx 0 0 30rpx;
+border-radius:37rpx;
+color:#fff;
+font-weight:600;
+background:#06c1ae;
+word-break:break-all;
+position:relative;
+text-align:center;
+min-height:90rpx;
+} */

@@ -151,3 +151,15 @@ scroll-view{box-sizing:border-box;}*/
   top:0;
   left:0;
 }
+/*获取formId 模板消息  */
+.newsBtn{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	border:none!important;
+	z-index:2;
+	margin:0;
+	padding:0;
+}

@@ -1,5 +1,6 @@
 <!--template.wxml-->
 <!--开始听写按钮-->
+
 <template name="bt_start_tingxie">
   <view class="bt" bindtap="gotoNext">
     <view class="bt_text f2">
@@ -16,26 +17,64 @@
     <view></view>
   </view>
 </template>
+<template name="starInline">
+  <block wx:if="{{star==0}}">
+    <image wx:for="{{starArr_empty}}" class="unit-starLine" src="../../images/play/{{item}}.png" style="height:33rpx;width:32rpx;"></image>
+  </block>
+  <block wx:if="{{star==1}}">
+    <image wx:for="{{starArr_oneStar}}" class="unit-starLine" src="../../images/play/{{item}}.png" style="height:33rpx;width:32rpx;"></image>
+  </block>
+  <block wx:if="{{star==2}}">
+    <image wx:for="{{starArr_twoStar}}" class="unit-starLine" src="../../images/play/{{item}}.png" style="height:33rpx;width:32rpx;"></image>
+  </block>
+  <block wx:if="{{star==3}}">
+    <image wx:for="{{starArr_threeStar}}" class="unit-starLine" src="../../images/play/{{item}}.png" style="height:33rpx;width:32rpx;"></image>
+  </block>
+</template>
 
 
 <template name="Buy">
  <view class="maskBox"></view> 
   <view class="maskOfKey clearfix">
-    <view class="titleOfTips">
-        <image  class="title-bg" src="../../images/unit/modeOfTitle.png" mode="widthFix"></image>
-        <image  class="del" src="../../images/unit/delete_box.png" mode="widthFix" bindtap="returnToUnit"></image>
-    </view>
-    <view class="tips">你共有 <image src="../../images/unit/key.png" mode="widthFix"></image>    ×{{key_rest_count}} </view>
-      <view class="openThisUnitWithKey" bindtap="openThisUnitWithKey">
-      <image src="../../images/unit/needKeyNum.png" mode="widthFix"></image> 
+    <block wx:if="{{key_rest_count==0}}">
+      <view class="titleOfTips">
+      <image  class="title-bg" src="../../images/unit/modeOfTitle.png" mode="widthFix"></image>
+     <view bindtap="returnToUnit" class="del"><image src="../../images/word/Menu-close.png" mode="widthFix" ></image></view>
       </view>
-      <view class="openAllBook" bindtap="openAllBook">
-      <view class="NeedMoney"><text class="symbol LeftY">￥</text> <text class="showNumOfMoney">{{money}}</text> <text class="symbol LeftC">元</text></view>     
-      <!-- <image src="../../images/unit/BuyThisBook.png" mode="widthFix"></image>       -->
+    <!-- <view class="tips">你共有 <image src="../../images/unit/key.png" mode="widthFix"></image>    ×{{key_rest_count}} </view>
+    <view class="openThisUnitWithKey" bindtap="openThisUnitWithKey">
+    <image src="../../images/unit/needKeyNum.png" mode="widthFix"></image> 
+    </view>
+    <view class="openAllBook" bindtap="openAllBook" bindload="imageOnLoad">
+    <view class="NeedMoney"><text class="symbol LeftY">￥</text> <text class="showNumOfMoney">{{money}}</text> <text class="symbol LeftC">元</text></view>     
+     <image src="../../images/unit/BuyThisBook.png" mode="widthFix"></image>
+    </view> -->
+      <view class="bookName">《{{book_name}}》</view>
+      <view class="showBook">
+        <image src="{{book_img}}"></image>
+      </view>
+      <view class="showMoney clearfix"><text>¥</text> <view class="showNumOfMoney">{{money}}</view> <text>元</text></view>     
+      <view class="openAllBook" bindtap="openAllBook" bindload="imageOnLoad">
+      <image src="../../images/unit/BuyThisBook.png" mode="widthFix"></image>
       </view>
       <view class="WX-onSecurity">
       <image src="../../images/unit/modeOfFooter.png" mode="widthFix"></image>            
       </view>
+    </block>
+    <block wx:else>
+      <view class="titleOfTips">
+      <image  class="title-bg" src="../../images/unit/keyOfTitle.png" style="width:600rpx;height:250rpx;"></image>
+      <view bindtap="returnToUnit" class="del"><image src="../../images/word/Menu-close.png" mode="widthFix" ></image></view>
+      </view>
+      <view class="tips"><text class="color333">你共有</text> <image src="../../images/unit/key.png" style="width:97rpx;height:117rpx;"></image> <text class="timesSign">×</text> <text class="key-num">{{(key_rest_count)}}</text></view>
+      <view class="openThisUnitWithKey" bindtap="openThisUnitWithKey">
+      <image src="../../images/unit/needKeyNum.png" mode="widthFix"></image> 
+      </view>
+      <view class="WX-share" catchtap="toShare">
+      <button open-type="share"></button>
+      <image src="../../images/unit/shareKey.png" style="width:387rpx;height:53rpx;"></image>            
+      </view>
+    </block>
   </view>
 </template>
 
@@ -67,7 +106,6 @@
 
 <!--页面加载中  -->
 <template name="pageLoading">
-  <view class="mask" hidden="{{isLoading}}"></view>
+  <!--<view class="mask" hidden="{{isLoading}}"></view>-->
   <loading hidden="{{isLoading}}">加载中...</loading>
 </template>
-

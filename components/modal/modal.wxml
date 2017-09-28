@@ -1,11 +1,13 @@
 <template name="modal">
-  <view class="modal" wx:if="{{show}}">
+  <view class="modal" wx:if="{{show}}" catchtouchmove="catchTouchMove">
     <view class="wrapper">
-    <image src="../../images/word/blue-24.png" class="img"></image>
+    <image src="/images/word/bg_del.png" class="img"></image>
+    <view class="del_txt">删除自定义</view>
+      <!-- <image  class="del" src="../../images/unit/delete_box.png" mode="widthFix" bindtap="returnToUnit"></image>  -->
       <view class="title">{{title}}</view>
       <view class="choose-bar">
+         <view class="submit" catchtap="_submit">{{submit}}</view>
         <view class="cancel" catchtap="_cancel">{{cancel}}</view>
-        <view class="submit" catchtap="_submit">{{submit}}</view>
       </view>
     </view>
   </view>

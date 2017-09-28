@@ -3,17 +3,20 @@
 
 page {
   height: 100%;
+  font-family: "微软雅黑";
 }
 
 view {
   box-sizing: border-box;
 }
 
+.wrap {
+  padding-bottom: 118rpx;
+}
+
 .background {
-  min-height: 100%;
-  padding-top:34px;
-  background: url(http://imglf1.nosdn.127.net/img/TkRpUWhnbGQwcUxPN2NnVzdhNjBZV0xqRFJTK21HZ2pob2k5anFIMXliVk1jazI1TTRBLzBRPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg) 0 0 no-repeat,
-                url(http://imglf.nosdn.127.net/img/TkRpUWhnbGQwcUxPN2NnVzdhNjBZY0NxYVdDZ1VvYmNrK3hJbS8xczJucUJDQWNiV0s5aERnPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg) 0 100% no-repeat;
+  height: 100%;
+  background: url(http://image.chubanyun.net/images/Dictation/book/bg_head.png) 0 0 no-repeat;
   background-size: 100% auto;
   background-color: #6cd7ac;
   /* background: url(http://imglf0.nosdn.127.net/img/TkRpUWhnbGQwcUpUa2JzYWZITVhXbXEyeU9DbXdQeDJna1dUVlJ5dlY5ZUN4eVdBYTFIRVZBPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg) no-repeat;
@@ -21,26 +24,89 @@ view {
    *//* background: #217a7e;  */
 }
 
+.list-box {
+  margin-top: 15rpx;
+}
+
+.last {
+  position: fixed;
+  bottom: 30rpx;
+}
+
+.type_p {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.unit-bottom {
+  width: 100%;
+}
+
 /*头部*/
 
-.title {
+.top-up {
   width: 100%;
-  background-color: #a5e24d;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  color: #333;
+  padding-bottom: 10rpx;
+  background-color: #31b1a4;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  /* height:196rpx; */
+  opacity: 1;
+  height: 100rpx;
+  transition: all 0.5s;
+}
+
+.top-down {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   position: fixed;
   left: 0;
   top: 0;
+  color: #333;
+  padding-bottom: 0;
+  background-color: rgba(45, 97, 137, 0.7);
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .publicKeyNum {
   font-size: 14px !important;
-  line-height: 18px !important;
   padding: 8px 0;
   padding-right: 5px;
   flex: 1;
-  color: #147426;
+  color: #fff;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.publicKeyNum image {
+  width: 31rpx;
+  height: 38rpx;
 }
 
 .book-title {
@@ -50,7 +116,51 @@ view {
   flex-grow: 1;
   flex: 4;
   padding-right: 20rpx;
-  color: #147426;
+  color: #fff;
+}
+
+.top-botton-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.top-button {
+  width: 33%;
+  height: 118rpx;
+  font-size: 24rpx;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: -40rpx;
+}
+
+.top-button image {
+  width: 75rpx;
+  height: 75rpx;
+  margin-bottom: 10rpx;
+}
+
+.top-button button {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+}
+
+.red-dot {
+  position: absolute;
+  right: 35%;
+  top: 10rpx;
+  width: 15rpx;
+  height: 15rpx;
+  background-color: #dd4545;
+  border-radius: 50%;
 }
 
 /*单元列表*/
@@ -58,15 +168,20 @@ view {
 .sortName {
   text-align: center;
   margin: 0 auto;
-  margin-top: 40rpx;
-  color: #147326;
-  width: 277rpx;
-  height: 93rpx;
-  line-height: 93rpx;
-  border-radius: 9rpx;
-  box-shadow: 6rpx 11rpx #52bd92;
-  background: url(https://huzhenghao.github.io/practice/sortName.png)no-repeat;
-  background-size: 100% 100%;
+  margin-top: 60rpx;
+  color: #fff;
+  width: 327rpx;
+  height: 75rpx;
+  line-height: 75rpx;
+  /* box-shadow: 6rpx 11rpx #52bd92; */
+  background-color: rgba(33, 122, 126, 0.4);
+  border: 2px solid #c5fbff;
+  font-size: 18px;
+  border-radius: 34rpx;
+}
+
+.book-content {
+  margin-top: 230rpx;
 }
 
 .unit-list {
@@ -86,8 +201,9 @@ view {
   font-size: 0;
   display: flex;
   width: 33%;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .unit-discover {
@@ -201,136 +317,429 @@ view {
 }
 
 .sub_bg {
-  background: url(../../images/word/sub_bg.png);
+  background: url(http://image.chubanyun.net/images/Dictation/word/bg_submit2.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   position: fixed;
-  top: 10%;
+  top: 15%;
   left: 50%;
-  width: 670rpx;
-  height: 869rpx;
-  margin-left: -335rpx;
+  width: 604rpx;
+  height: 840rpx;
+  margin-left: -302rpx;
   z-index: 100;
-  padding: 10rpx 45rpx;
+  padding: 60rpx 31rpx;
 }
 
-.tips_star {
-  height: 500rpx;
-  text-align: center;
-  line-height: 400rpx;
-  font-size: 30px;
+.tiaofu {
+  width: 450rpx;
+  margin: 0 auto;
+  margin-top: -135rpx;
+}
+
+.tiaofu image {
+  width: 450rpx;
+  height: 137rpx;
+}
+
+.tips_star_3 {
+    width: 450rpx;
+  margin: 0 auto;
+  margin-top: 10rpx;
+}
+
+.tips_star_2 {
+    width: 450rpx;
+  margin: 0 auto;
+  margin-top: 8rpx;
+}
+
+.tips_star_1 {
+  width: 450rpx;
+  margin: 0 auto;
+  margin-top: 43rpx;
+  margin-bottom: 220rpx;
+}
+
+.tips_star_0 {
+  width: 400rpx;
+  margin: 0 auto;
+  margin-top: 10rpx;
 }
 
 .btn {
-  width: 612rpx;
-  margin-bottom: -60rpx;
+  margin-top:90rpx;
 }
 
 .me {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .me image {
-  width: 160rpx;
-  height: 160rpx;
+  width: 145rpx;
+  height: 145rpx;
 }
 
 .sub_star_3, .sub_star_2, .sub_star_1, .sub_star_0 {
   display: flex;
   margin: 0 auto;
-  width: 430rpx;
+  width: 375rpx;
 }
 
 .sub_star_3 view:nth-child(1) {
-  width: 138rpx;
-  height: 133rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-13deg) scale(0.9);
 }
 
 .sub_star_3 view:nth-child(2) {
-  width: 161rpx;
-  height: 150rpx;
+  width: 144rpx;
+  height: 144rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 .sub_star_3 view:nth-child(3) {
-  width: 140rpx;
-  height: 133rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(13deg) scale(0.9);
 }
 
 .sub_star_2 view:nth-child(1) {
-  width: 138rpx;
-  height: 133rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-13deg);
 }
 
 .sub_star_2 view:nth-child(2) {
-  width: 161rpx;
-  height: 150rpx;
+  width: 144rpx;
+  height: 144rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 .sub_star_2 view:nth-child(3) {
-  width: 135rpx;
-  height: 135rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 .sub_star_1 view:nth-child(1) {
-  width: 138rpx;
-  height: 133rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star-t.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-13deg) scale(0.9);
 }
 
 .sub_star_1 view:nth-child(2) {
-  width: 161rpx;
-  height: 160rpx;
+  width: 144rpx;
+  height: 144rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-13deg) scale(1);
 }
 
 .sub_star_1 view:nth-child(3) {
-  width: 135rpx;
-  height: 135rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 .sub_star_0 view:nth-child(1) {
-  width: 135rpx;
-  height: 135rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-26deg);
 }
 
 .sub_star_0 view:nth-child(2) {
-  width: 161rpx;
-  height: 160rpx;
+  width: 144rpx;
+  height: 144rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
-  background-size: cover;
+  background-size: 100% 100%;
   transform: rotate(-13deg) scale(1);
 }
 
 .sub_star_0 view:nth-child(3) {
-  width: 135rpx;
-  height: 135rpx;
+  width: 114rpx;
+  height: 114rpx;
   background: url(http://image.chubanyun.net/images/Dictation/finally/Star_base.png);
+  background-size: 100% 100%;
+}
+
+.proloadBg {
+  width: 0;
+  height: 0;
+  background: url(http://image.chubanyun.net/images/Dictation/word/bg_submit2.png);
+}
+
+.bottomMore {
+  position: relative;
+}
+
+.bottomMore image {
+  display: block;
+}
+
+.bottomMore .no_more {
+  position: absolute;
+  left: 0;
+  bottom: 40rpx;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.share-button {
+  width: 144rpx;
+  height: 144rpx;
+}
+
+.share-button button {
+  width: 144rpx;
+  height: 144rpx;
+  opacity: 0;
+  position: absolute;
+}
+
+.sub_close {
+  position: absolute;
+  right: 10rpx;
+  top: 15rpx;
+}
+
+.sub_close image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+/*新设计的样式*/
+
+/*横向flex布局*/
+
+.flexRow {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  justify-content: center; /*item在主轴上的对齐方式*/
+  align-items: center; /*item在交叉轴上的对齐方式*/
+}
+
+/*竖向flex布局*/
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /*item在主轴上的对齐方式*/
+  align-items: center; /*item在交叉轴上的对齐方式*/
+}
+
+.wrap {
+  width: 100%;
+  height: 100%;
+}
+
+.lei {
+  width: 100%;
+  background: #eee;
+  align-items: flex-start;
+}
+
+.lei .leiName {
+  width: 33.33%;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  padding: 24rpx 0 0;
+}
+
+.lei .active {
+  color: #333;
+}
+
+.lei .active .bg {
+  width: 33rpx;
+  height: 8rpx;
+  background: #06c1ae;
+  border-radius: 10rpx;
+  margin-top: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.contain {
+  width: 100%;
+  height: calc(100% - 100rpx);
+}
+
+.contain scroll-view {
+  height: 100%;
+}
+
+.contain scroll-view .item {
+  padding: 18rpx 25px 0;
+  position:relative;
+  background-color: #fff;
+}
+.contain scroll-view .item:active {
+  background-color: #f8f8f8;
+}
+
+.contain scroll-view .item .head {
+  padding: 0 13rpx;
+  height: 54rpx;
+  line-height: 54rpx;
+  border: 1px solid #06c1ae;
+  border-radius: 10rpx;
+  display: inline-block;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 28rpx;
+}
+
+.contain scroll-view .item .list {
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-bottom: 1px solid #eee;
+}
+
+.contain scroll-view .item .list .lft {
+  font-size: 16px;
+  color: #333;
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.to-left {
+  width: 60rpx;
+  visibility: hidden;
+}
+
+.lesson-title {
+  font-size: 16px;
+  margin-bottom: 28rpx;
+}
+
+.contain scroll-view .item .list .cen {
+  flex-grow: 1;
+  width:400rpx;
+  /* margin-left:56rpx; */
+}
+
+.contain scroll-view .item .list .cen .stars {
+  justify-content: flex-start;
+  font-size: 13px;
+  color: #999;
+}
+
+.contain .stars .star view {
+  width: 38rpx;
+  height: 36rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/book/star.png);
   background-size: cover;
+  margin-right: 10rpx;
+}
+
+.contain .stars .star1 view:first-child {
+  background: url(http://image.chubanyun.net/images/Dictation/book/star_light.png);
+  background-size: cover;
+}
+
+.contain .stars .star2 view {
+  background: url(http://image.chubanyun.net/images/Dictation/book/star_light.png);
+  background-size: cover;
+}
+
+.contain .stars .star2 view:last-child {
+  background: url(http://image.chubanyun.net/images/Dictation/book/star.png);
+  background-size: cover;
+}
+
+.contain .stars .star3 view {
+  background: url(http://image.chubanyun.net/images/Dictation/book/star_light.png);
+  background-size: cover;
+}
+
+.contain .stars .number {
+  margin-left: 40rpx;
+}
+
+.contain scroll-view .item .list .cen .detail {
+  justify-content: flex-start;
+  margin-top: 10rpx;
+  flex-wrap: wrap;
+}
+
+.contain .cen .detail .des {
+  margin-right: 26rpx;
+  margin-bottom: 20rpx;
+  margin-top: 10rpx;
+}
+
+.contain .cen .detail .pinyin {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 5rpx;
+}
+
+.contain .cen .detail .ci {
+  font-size: 16px;
+  color: #333;
+}
+
+.contain scroll-view .item .list .rgt {
+  padding: 0 10rpx;
+}
+
+.contain scroll-view .item .list .rgt image {
+  width: 74rpx;
+  height: 74rpx;
+}
+
+.item-add-more {
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: #ddd;
+}
+
+.item-no-more {
+  padding: 20rpx 0;
+  text-align: center;
+}
+.tip_words {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 36rpx;
+  color: #20a3d3;
+  font-weight: bold;
+  height: 280rpx;
+  align-content: center;
+}
+.tip_words image{
+  width: 300rpx;
+  height: 62rpx;
+  margin-top: 30rpx;
+}
+.tip_words .tip_item text{
+  color: #e48710;
+}
+.to-error {
+  font-size: 24rpx;
+  color:#fff;
+  text-align: center;
+  margin-top: 30rpx;
 }

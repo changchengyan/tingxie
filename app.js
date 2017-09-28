@@ -1,37 +1,50 @@
 //app.js
 var Config =
   {
-     //services: "https://dmservices.chubanyun.net/",
-    services: "https://rayscloud.chubanyun.net/api/Dictation/",
+    //services: "https://dmservices.chubanyun.net/",
+    //services: "https://rayscloud.chubanyun.net/api/Dictation/",
+    services: "http://deveapi.chubanyun.net/api/Dictation/",
     uid: 0
   };
 App({
   globalData: {
     userInfo: null,
-    font: "default"
+    font: "default",
+    dataCode: null,
+    formids:[]
   },
-  onLaunch: function () {
+  // onShow: function (options) {
+  //   var that = this;
+  //   that.globalData.dataCode = options.referrerInfo
+  // },
+  onLaunch: function (options) {
     //调用API从本地缓存中获取数据
     var that = this;
-    wx.getStorage
-      (
-      {
-        key: 'weixinUserInfo',
-        success: function (res) {
-          that.globalData.userInfo = res.data;
-          //判断是否为第一次启动程序
-          if (that.globalData.userInfo.first_login){
-            that.userLogin();
-          }
-          // that.globalData.userInfo.first_login = true;
-          Config.uid = res.data.weixinUser.uid;
-        },
-        fail: function () {
-          that.userLogin();
-        }
+    try {
+      var value = wx.getStorageSync('weixinUserInfo')
+      
+      if (value) {
+        that.globalData.userInfo = value;
+        
+        Config.uid = value.weixinUser.uid;
+        console.log("Config.uid ", Config.uid )
+      } else {
+        that.userLogin();
       }
-      );
+    } catch (e) {
+      that.userLogin();
+    }
+
   },
+	onHide:function(){
+		var that=this;
+		that.Dictation.saveUserFormIds(that.globalData.formids,function(res){
+			if(res.success){
+				console.log("清空了")
+				that.globalData.formids=[];
+			}			
+		});
+	},
   userLogin: function (cb) {
     var that = this;
     //用户登录
@@ -45,29 +58,37 @@ App({
               success: function (userinfo_res) {
                 wx.request(
                   {
-                    url: `${Config.services}DictationCommon/DictationLogin`,
+                    url: Config.services+'DictationCommon/DictationLogin',
                     method: "POST",
                     header: { 'content-type': 'application/json' },
                     data: { code: res.code, encryptedData: userinfo_res.encryptedData, iv: userinfo_res.iv, appcode: 'DICTATION' },
                     success: function (res) {
                       //保存到全局
                       that.globalData.userInfo = res.data.data;
-                      // that.globalData.userInfo.first_login = true;
                       Config.uid = res.data.data.weixinUser.uid;
                       wx.setStorageSync('weixinUserInfo', res.data.data);
                       if (cb) {
                         cb(userinfo_res);
                       }
+                    },
+                    fail: function (res) {
+                      wx.showToast
+                        (
+                        {
+                          title: "获取用户信息失败",
+                          icon: 'success',
+                          duration: 2000
+                        }
+                        )
                     }
                   }
                 )
               },
               fail: function () {
-                console.log("获取授权失败");
                 wx.openSetting({
                   success: (res) => {
-                    that.userLogin()
-                   }
+                    that.userLogin(cb)
+                  }
                 })
               }
             })
@@ -79,12 +100,49 @@ App({
       });
   },
   Dictation: {
-    addBookByISBN: function (isbn, callback) {
+    GetBookByScanISBN: function (isbn, callback) {
       //扫条码添加书籍
       wx.request
         (
         {
           url: Config.services + 'DictationBook/GetBookByScanISBN?uid=' + Config.uid + '&isbn=' + isbn,
+          header: { 'content-type': 'application/x-www-form-urlencoded' },
+          success: function (res) {
+            callback(res)
+            if (res.data.status == 0) {//新添加的书籍有提示
+              wx.showToast
+                (
+                {
+                  //title: res.data.data.book_name+"已添加到书架！",
+                  title: "添加成功",
+                  icon: 'success',
+                  duration: 1000
+                }
+                )
+
+            }
+
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: "扫条码添加书籍失败！",
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //根据ISBN返回图书列表
+    GetBookByISBN: function (isbn, callback) {
+      console.log("Config.uid", Config.uid)
+      wx.request
+        (
+        {
+          url: `${Config.services}DictationBook/GetBookByISBN?uid=${Config.uid}&isbn=${isbn}`,
           header: { 'content-type': 'application/x-www-form-urlencoded' },
           success: function (res) {
             callback(res)
@@ -94,7 +152,7 @@ App({
             wx.showToast
               (
               {
-                title: "扫条码添加书籍失败！",
+                title: "获取图书失败",
                 icon: 'success',
                 duration: 2000
               }
@@ -127,15 +185,12 @@ App({
         }
         );
     },
-    getDeskBookList: function (callback, lastid, count) {
+    getDeskBookList: function (callback) {
       //获得我的书籍列表
-      lastid = lastid * 1 + 1;
-      console.log(Config.uid);
       wx.request
         (
         {
           url: Config.services + 'DictationBook/GetDictationBookByUID?uid=' + Config.uid,
-          // data: { uid: Config.uid, client_name: 4, count: count, last_id: lastid },
           success: function (res) {
             if (res.data.success) {
               callback(res.data);
@@ -181,7 +236,7 @@ App({
       })
     },
     //根据uid和bookId获取课程列表
-    getLessonList: function (uid, bookId,index,pageSize, callback) {
+    getLessonList: function (uid, bookId, index, pageSize, callback) {
       var that = this;
       wx.request({
         url: Config.services + 'DictationLesson/GetUserDictationBookLessons?uid=' + uid + '&bookId=' + bookId + '&pageIndex=' + index + '&pageSize=' + pageSize,
@@ -220,8 +275,8 @@ App({
         url: Config.services + 'DictationLesson/GetLessonWordById?lessonId=' + lesson_id,
         header: { 'content-type': 'application/json' },
         success: function (res) {
-        	console.log('获取课程')
-        	
+          console.log('获取课程')
+
           if (res.data.success) {
             callback(res.data);
           } else {
@@ -303,43 +358,43 @@ App({
 
 
     //根据用户Id、课本id、课程id、标准课程id，返回解锁课程
-    keyToLesson:function(uid,bookId,lesson_id,UserLesson_id,cb){
-        wx.request({
-          url: `${Config.services}/DictationCommon/UnlockLessonByUserKey?uid=${Config.uid}&dictationBookId=${bookId}&dictationUserLessonId=${lesson_id}&dictationLessonId=${UserLesson_id}`,
-          header: { 'content-type': 'application/json' },
-          success: function (res) {
-            console.log('获取解锁课程');
-            if (res.data.success) {
-              cb(res.data);
-            } else {
-              wx.showToast
-                (
-                {
-                  title: res.data.message,
-                  icon: 'success',
-                  duration: 2000
-                }
-                )
-            }
-          },
-          fail: function (res) {
+    keyToLesson: function (uid, bookId, lesson_id, UserLesson_id, cb) {
+      wx.request({
+        url: `${Config.services}/DictationCommon/UnlockLessonByUserKey?uid=${Config.uid}&dictationBookId=${bookId}&dictationUserLessonId=${lesson_id}&dictationLessonId=${UserLesson_id}`,
+        header: { 'content-type': 'application/json' },
+        success: function (res) {
+          console.log('获取解锁课程');
+          if (res.data.success) {
+            cb(res.data);
+          } else {
             wx.showToast
               (
               {
-                title: "获取课程信息失败！",
+                title: res.data.message,
                 icon: 'success',
                 duration: 2000
               }
               )
-          }      
-        })
+          }
+        },
+        fail: function (res) {
+          wx.showToast
+            (
+            {
+              title: "获取课程信息失败！",
+              icon: 'success',
+              duration: 2000
+            }
+            )
+        }
+      })
     },
 
 
     //根据uid、bookId、userLessonId返回是否解锁=>boolen
-    ifAssess:function(uid,lesson_id,cb){
+    ifAssess: function (uid, lesson_id, cb) {
       wx.request({
-        url: `${Config.services}DictationLesson/CheckUnlock?uid=${uid}&userLessonId=${lesson_id}`,
+        url: `${Config.services}DictationLesson/CheckUnlockV1?uid=${uid}&userLessonId=${lesson_id}`,
         header: { 'content-type': 'application/json' },
         success: function (res) {
           if (res.data.success) {
@@ -364,11 +419,11 @@ App({
               duration: 2000
             }
             )
-        }   
+        }
       })
     },
     //根据uid获取用户当前获取的钥匙数=》number
-    ownKeyNum:function(uid,cb){
+    ownKeyNum: function (uid, cb) {
       wx.request({
         url: `${Config.services}/DictationCommon/getRestKeyCount?uid=${Config.uid}`,
         header: { 'content-type': 'application/json' },
@@ -390,7 +445,7 @@ App({
           wx.showToast
             (
             {
-                title: "获取钥匙数量失败",
+              title: "获取钥匙数量失败",
               icon: 'success',
               duration: 2000
             }
@@ -433,7 +488,7 @@ App({
 
     },
     //获取书的价钱
-	getBookPriceById:function(bookId,cb){
+    getBookPriceById: function (bookId, cb) {
       wx.request({
         url: `${Config.services}DictationBook/GetBookPriceById?bookId=${bookId}`,
         success: function (res) {
@@ -459,15 +514,15 @@ App({
               duration: 2000
             }
             )
-        }   
+        }
       })
     },
     //删除用户的自定义课程
-    delCustomList: function (lessonId , cb){
+    delCustomList: function (lessonId, cb) {
       wx.request({
         url: `${Config.services}DictationLesson/DelUserCustomLesson?uid=${Config.uid}&lessonId=${lessonId}`,
         success: function (res) {
-            cb(res.data)
+          cb(res.data)
         },
         fail: function (res) {
           console.log('获取内容失败')
@@ -499,10 +554,10 @@ App({
       wx.request({
         url: Config.services + "DictationCommon/GetUserCount",
         header: { 'content-type': 'application/json' },
-        success:function(res){
+        success: function (res) {
           callback(res.data.data.userCount);
         },
-        fail: function(res){
+        fail: function (res) {
           console.log("获取在线人数失败");
         }
       })
@@ -544,11 +599,11 @@ App({
       })
     },
     //添加用户自定义听写本
-    addLesson: function (wordList, cb) {
+    addLesson: function (wordList, title, cb) {
       wx.request({
-        url: `${Config.services}DictationLesson/AddUserCustomLesson`,
+        url: `${Config.services}DictationLesson/AddUserCustomLessonAndTitle`,
         method: 'POST',
-        data: { uid: Config.uid, wordlist: wordList },
+        data: { uid: Config.uid, title: title, wordlist: wordList },
         success: function (res) {
           if (res.data.success) {
             cb(res.data)
@@ -586,241 +641,626 @@ App({
       })
     },
     /*根据bookId添加书籍*/
-   getBookByShare:function(bookId,cb){
-   	console.log(bookId)
-   	wx.request({
-	    url: `${Config.services}DictationBook/GetBookByShare?uid=${Config.uid}&bookId=${bookId}`,
-	    success: function (res) {
-	    	console.log("根据bookId添加书籍")
-	    	console.log(res)
-	      if(res.data.success){
-	      	if(res.data.status==0){//新添加的书籍有提示
-	      		wx.showToast
-            (
-               {
-                  //title: res.data.data.book_name+"已添加到书架！",
-                  title: res.data.message,
-                  icon: 'success',
-                  duration: 2000
-               }
-            )
-            
-	      	}
-          if(cb){cb(res.data);}    		
-        }
-      	if(!res.data.success){
-      		wx.showToast
-            (
-               {
-                  title: res.data.message,
-                  icon: 'success',
-                  duration: 2000
-               }
-            )
-      	}
-        
-         
-	    },
-	    fail: function () {
-	      wx.showToast
-         (
-           {
-              title: "根据ID添加书籍失败！",
-              icon: 'success',
-              duration: 2000
-           }
-         )
-	    }
-	  })
-   },
-   /*分享书本课程*/
-   getBookLessonByShare: function (userLessonId, cb) {
-     wx.request({
-       url: `${Config.services}DictationLesson/GetBookLessonByShare?uid=${Config.uid}&userLessonId=${userLessonId}`,
-       success: function (res) {
-         if (res.data.success) {
-           if (res.data.status == 0&&res.data.message=='add') {//新添加的课本
-           		wx.showToast
-	            ({
-	                 title: "已添加到书架！",
-	                //  title: "已添加到自定义列表！",
-	                 icon: 'success',
-	                 duration: 2000
-	            })           	
-           }
-					if (cb) { cb(res.data); }
-         }
-         if (!res.data.success) {
-         	wx.showToast
-             ({
-               title: res.data.message,
-               icon: 'success',
-               duration: 2000
-             })          
-         }        
-       },
-       fail: function () {
-         wx.showToast
-           (
-           {
-             title: "添加自定义失败！",
-             icon: 'success',
-             duration: 2000
-           }
-           )
-       }
-     })
-   },
-   /*分享自定义课程*/
-   getLessonByShare:function(userLessonId,cb){
-   	wx.request({
-	    url: `${Config.services}DictationLesson/GetLessonByShare?uid=${Config.uid}&userLessonId=${userLessonId}`,
-	    success: function (res) {
-	      if(res.data.success){
-	      	if(res.data.status==0){//新添加的自定义有提示
-	      		wx.showToast
-            (
-               {
-                  //title: res.data.data.book_name+"已添加到书架！",
-                  title: "已添加到自定义列表！",
-                  icon: 'success',
-                  duration: 2000
-               }
-            )
-	      	}
-          if(cb){cb(res.data);}    		
-        }
-      	if(!res.data.success){
-      		wx.showToast
-            (
-               {
-                  title: res.data.message,
-                  icon: 'success',
-                  duration: 2000
-               }
-            )
-      	}
-        
-         
-	    },
-	    fail: function () {
-	      wx.showToast
-         (
-           {
-              title: "添加自定义失败！",
-              icon: 'success',
-              duration: 2000
-           }
-         )
-	    }
-	  })
-   },
-   //根据用户UID和当前课程返回下一课程ID
-   returnNext: function (currLessonId, cb) {
-     wx.request({
-       url: `${Config.services}DictationLesson/GetLastUserLessonId?uid=${Config.uid}&currLessonId=${currLessonId}`,
-       success: function (res) {
-         if (res.data.success) {
-           cb(res.data)
-         }
-         else {
-           console.log(res.data.mesage)
-         }
-       },
-       fail: function (res) {
-         console.log('获取内容失败')
-       }
-     })
-   },
-   addBrowser:function(book_id,book_name,callback,behavior)
-    {
-     if(!behavior){behavior=6;}
-      //添加浏览记录
-      wx.request
-      (
-        {
-          url:`${Config.services}DictationCommon/AddBrowser`,
-          data:{ uid: Config.uid,sales_id:book_id,sales_name:book_name,behavior:behavior,client_name:4 },
-          method:'POST',
-          success: function(res)
-          {            
-              callback(res);
-          },
-          fail:function(res)
-          {
+    getBookByShare: function (bookId, cb) {
+      console.log(bookId)
+      wx.request({
+        url: `${Config.services}DictationBook/GetBookByShare?uid=${Config.uid}&bookId=${bookId}`,
+        success: function (res) {
+          console.log("根据bookId添加书籍")
+          console.log(res)
+          if (res.data.success) {
+            if (res.data.status == 0) {//新添加的书籍有提示
               wx.showToast
-              (
+                (
                 {
-                    title: "添加浏览记录异常！",
-                    icon: 'success',
-                    duration: 2000
+                  //title: res.data.data.book_name+"已添加到书架！",
+                  title: "添加成功",
+                  icon: 'success',
+                  duration: 1000
                 }
+                )
+
+            }
+            if (cb) { cb(res.data); }
+          }
+          if (!res.data.success) {
+            wx.showToast
+              (
+              {
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+              }
               )
           }
-        }
-      );
-    },
-    //  选择年级
-  searchBook: function (grade,index,size,callback) {
-    wx.request({
-      url: `${Config.services}DictationBook/GetDictationBookByPage?grade=${grade}&uid=${Config.uid}&pageIndex=${index}&pageSize=${size}`,
-      success: function (res) {
-        callback(res.data);
-      },
-      fail: function () {
-        wx.showToast({
-          title: '获取书籍失败',
-          icon: success,
-          duration: 2000
-        })
-      }
-    })
-  },
-  //删除单词
-  delWordById: function(ids,userLessonId,cb) {
-    wx.request({
-      url: `${Config.services}DictationLesson/DelWordById?ids=${ids}&userLessonId=${userLessonId}`,
-      success: function (res) {
-        if (res.data.success) {
-          cb(res.data)
-        }
-        else {
-          console.log(res.data.mesage)
-        }
-      },
-      fail: function (res) {
-        wx.showToast({
-          title: '删除失败',
-          icon: success,
-          duration: 2000
-        })
-      }
-    })
-  },
-  //添加单词
-  AddUserLessonWord: function (userLessonId, wordlist, cb) {
-    wx.request
-      (
-      {
-          url: `${Config.services}DictationLesson/AddUserLessonWord`,
-        data: { uid: Config.uid, userLessonId: userLessonId, wordlist: wordlist},
-        method: 'POST',
-        success: function (res) {
-          cb(res);
+
+
         },
-        fail: function (res) {
+        fail: function () {
           wx.showToast
             (
             {
-              title: "添加单词失败",
+              title: "根据ID添加书籍失败！",
               icon: 'success',
               duration: 2000
             }
             )
         }
+      })
+    },
+    /*分享书本课程*/
+    getBookLessonByShare: function (userLessonId, cb) {
+      wx.request({
+        url: `${Config.services}DictationLesson/GetBookLessonByShare?uid=${Config.uid}&userLessonId=${userLessonId}`,
+        success: function (res) {
+          if (res.data.success) {
+            if (res.data.status == 0 && res.data.message == 'add') {//新添加的课本
+              wx.showToast
+                ({
+                  title: "已添加到书架！",
+                  //  title: "已添加到自定义列表！",
+                  icon: 'success',
+                  duration: 2000
+                })
+            }
+            if (cb) { cb(res.data); }
+          }
+          if (!res.data.success) {
+            wx.showToast
+              ({
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+              })
+          }
+        },
+        fail: function () {
+          wx.showToast
+            (
+            {
+              title: "添加自定义失败！",
+              icon: 'success',
+              duration: 2000
+            }
+            )
+        }
+      })
+    },
+    /*分享自定义课程*/
+    getLessonByShare: function (userLessonId, cb) {
+      wx.request({
+        url: `${Config.services}DictationLesson/GetLessonByShare?uid=${Config.uid}&userLessonId=${userLessonId}`,
+        success: function (res) {
+          if (res.data.success) {
+            if (res.data.status == 0) {//新添加的自定义有提示
+              wx.showToast
+                (
+                {
+                  //title: res.data.data.book_name+"已添加到书架！",
+                  title: "已添加到自定义列表！",
+                  icon: 'success',
+                  duration: 2000
+                }
+                )
+            }
+            if (cb) { cb(res.data); }
+          }
+          if (!res.data.success) {
+            wx.showToast
+              (
+              {
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+
+
+        },
+        fail: function () {
+          wx.showToast
+            (
+            {
+              title: "添加自定义失败！",
+              icon: 'success',
+              duration: 2000
+            }
+            )
+        }
+      })
+    },
+    //根据用户UID和当前课程返回下一课程ID
+    returnNext: function (currLessonId, cb) {
+      wx.request({
+        url: `${Config.services}DictationLesson/GetLastUserLessonId?uid=${Config.uid}&currLessonId=${currLessonId}`,
+        success: function (res) {
+          if (res.data.success) {
+            cb(res.data)
+          }
+          else {
+            console.log(res.data.mesage)
+          }
+        },
+        fail: function (res) {
+          console.log('获取内容失败')
+        }
+      })
+    },
+    addBrowser: function (book_id, book_name, dictation_lesson_id, callback, behavior) {
+
+      if (!behavior) { behavior = 6; }
+      //添加浏览记录
+      wx.request
+        (
+        {
+          url: `${Config.services}DictationCommon/AddBrowser`,
+          data: { uid: Config.uid, sales_id: book_id, sales_name: book_name, source_sales_id: dictation_lesson_id, behavior: behavior, client_name: 4 },
+          method: 'POST',
+          success: function (res) {
+            callback(res.data);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: "添加浏览记录异常！",
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //UpdateBrowserTime
+    UpdateBrowserTime: function (browser_id, cd) {
+      wx.request({
+        url: `${Config.services}DictationCommon/UpdateBrowserTime?browser_id=${browser_id}`,
+        success: function (res) {
+          // console.log("UpdateBrowserTime",res.data)
+          // if (res.data.success){
+          //   cd(res.data);
+          // }
+
+        },
+
+      })
+    },
+    //  选择年级
+    searchBook: function (grade, index, size, callback) {
+      wx.request({
+        url: `${Config.services}DictationBook/GetDictationBookByPage?grade=${grade}&uid=${Config.uid}&pageIndex=${index}&pageSize=${size}`,
+        success: function (res) {
+          callback(res.data);
+        },
+        fail: function () {
+          wx.showToast({
+            title: '获取书籍失败',
+            icon: success,
+            duration: 2000
+          })
+        }
+      })
+    },
+    //删除单词
+    delWordById: function (ids, userLessonId, cb) {
+      wx.request({
+        url: `${Config.services}DictationLesson/DelWordById?ids=${ids}&userLessonId=${userLessonId}`,
+        success: function (res) {
+          if (res.data.success) {
+            cb(res.data)
+          }
+          else {
+            console.log(res.data.mesage)
+          }
+        },
+        fail: function (res) {
+          wx.showToast({
+            title: '删除失败',
+            icon: success,
+            duration: 2000
+          })
+        }
+      })
+    },
+    //添加单词
+    AddUserLessonWord: function (userLessonId, wordlist, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}DictationLesson/AddUserLessonWordV1`,
+          data: { uid: Config.uid, userLessonId: userLessonId, wordlist: wordlist },
+          method: 'POST',
+          success: function (res) {
+            cb(res);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: "添加单词失败",
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //自定义课程title的更改 
+    UpdateCustomLessonTitle: function (title, userLessonId, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationLesson/UpdateCustomLessonTitle?title=${title}&userLessonId=${userLessonId}&uid=${Config.uid}`,
+          success: function (res) {
+            cb(res);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: "添加题目失败",
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //获取用户adviserid
+    GetUserSpreadAdviser: function (cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationCommon/GetUserSpreadAdviser?uid=${Config.uid}`,
+          success: function (res) {
+            cb(res);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: "GetUserSpreadAdviser失败",
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //记录用户adviserid
+    InsertUserSpreadAdviser: function (adviser_id, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationCommon/InsertUserSpreadAdviser?uid=${Config.uid}&adviser_id=${adviser_id}`,
+          success: function (res) {
+            cb(res);
+          },
+          // fail: function (res) {
+          //   wx.showToast
+          //     (
+          //     {
+          //       title: "InsertUserSpreadAdviser失败",
+          //       icon: 'success',
+          //       duration: 2000
+          //     }
+          //     )
+          // }
+        }
+        );
+    },
+    //电视deviceid与用户id绑定
+    BindAppDevice: function (scene,cb) {
+      if (!scene) {
+        return
       }
-      );
-  }
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationCommon/BindAppDevice?uid=${Config.uid}&deviceid=${scene}`,
+          success: function (res) {
+            console.log("deviceid", scene, res.data.success)
+            wx.removeStorageSync('scene');
+            if (!res.data.success&&res.data.status==3001){
+              cb();
+            }
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //通过uid返回deviceid
+    GetAppDeviceIdByUid:function(cb){
+      wx.request
+        (
+        {
+            url: `${Config.services}/DictationCommon/GetAppDeviceIdByUid?uid=${Config.uid}`,
+          success: function (res) {
+            cb(res.data);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: res.message,
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //解除deviceid和用户的绑定
+    DeleteBindingDevice: function (deviceid,cb){
+      wx.request
+        ({
+            url: `${Config.services}/DictationCommon/DeleteBindingDevice?uid=${Config.uid}&deviceid=${deviceid}`,
+          success: function (res) {
+            cb(res.data);
+
+          },
+          fail: function (res) {
+            wx.showToast
+	          ({
+	            title: res.message,
+	            icon: 'success',
+	            duration: 2000
+	          })
+          }
+        });
+    },
+    //从听写返回码书
+    GetPlatformBookId: function (book_id, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationBook/GetPlatformBookId?book_id=${book_id}`,
+          success: function (res) {
+            cb(res.data);
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: res.message,
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
+    //用户分享增加钥匙
+    AddUserKeyByShared: function (preUid, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationBook/AddUserKeyByShared?share_uid=${Config.uid}&uid=${preUid}`,
+          success: function (res) {
+            if (cb) {
+              cb(res.data);
+            }
+
+          },
+          fail: function (res) {
+            wx.showToast
+              (
+              {
+                title: res.message,
+                icon: 'success',
+                duration: 2000
+              }
+              )
+          }
+        }
+        );
+    },
     
+    //获取用户是否点击字段
+    GetUserBookIsClick: function (bookId, cb) {
+      wx.request
+        (
+        {
+          url: `${Config.services}/DictationBook/GetUserBookIsClick?uid=${Config.uid}&bookId=${bookId}`,
+          success: function (res) {
+            if (cb) {
+              cb(res.data);
+            }
+
+          },
+
+        }
+        );
+    },
+    //更新用户是否点击字段
+    SetUserBookIsClick: function (bookId, cb) {
+      wx.request
+        (
+        {
+            url: `${Config.services}/DictationBook/SetBookClick?uid=${Config.uid}&bookId=${bookId}`,
+           success: function (res) {
+            if (cb) {
+              cb(res.data);
+            }
+
+          },
+
+        }
+        );
+    },
+    //获取购买信息
+    GetBookInfoById: function (bookId, cb) {
+      wx.request
+	    ({
+	        url: `${Config.services}/DictationBook/GetBookInfoById?bookId=${bookId}`,
+	      success: function (res) {
+	        if (cb) {
+	          cb(res.data);
+	        }	
+	      }	
+	    });
+    },
+    //根据ID获取课程章节用户自定义的高频单词
+    GetLessonCustomWordById: function (userLessonId,topnum,cb){
+      wx.request
+        (
+        {
+            url: `${Config.services}/DictationLesson/GetLessonCustomWordById?userLessonId=${userLessonId}&topnum=${topnum}`,
+          success: function (res) {
+            if (cb) {
+              cb(res.data);
+            }
+          },
+        }
+        );
+    },
+    //获取书籍分类
+    getCategoryByBookId:function(bookId,cb){
+    	wx.request
+	    ({
+	      url: `${Config.services}/DictationLesson/GetCategoryByBookId?bookId=${bookId}`,
+	      success: function (res) {
+	        if (cb) {
+	          cb(res.data);
+	        }	
+	      },
+	      fail: function (res) {
+            wx.showToast
+	          ({
+	            title: res.message,
+	            icon: 'success',
+	            duration: 2000
+	          })
+          }
+	    });
+    },
+    //根据分类获取书籍课程列表
+    getUserLessonsAndWords:function(bookId,category,pageIndex,pageSize,cb){
+    	wx.request
+	    ({
+	      url: `${Config.services}/DictationLesson/GetUserLessonsAndWords`,
+	      data:{
+	      	uid:Config.uid,
+	      	bookId:bookId,
+	      	category:category,
+	      	pageIndex:pageIndex,
+	      	pageSize:pageSize
+	      },
+	      success: function (res) {
+	        if (cb) {
+	          cb(res.data);
+	        }	
+	      },
+	      fail: function (res) {
+            wx.showToast
+	          ({
+	            title: res.message,
+	            icon: 'success',
+	            duration: 2000
+	          })
+          }
+	    });   	
+    },
+    //根据uid判断是否购买书籍
+    GetUserBookIsPay: function (bookId, cb) {
+      wx.request
+        ({
+          url: `${Config.services}/DictationBook/GetUserBookIsPay?uid=${Config.uid}&bookId=${bookId}`,
+          success: function (res) {
+            if (cb) {
+              cb(res.data);
+            }
+          }
+        });
+    },
+    saveUserFormIds: function ( formids,cb) {
+    	var services=Config.services;//services: "http://deveapi.chubanyun.net/api/Dictation/",
+    	var index=services.indexOf('/api/');
+			var str=services.substring(0,index+5)
+      wx.request({
+        url: `${str}Platform/AppletTemplate/SaveUserFormIds`,
+        method: 'POST',
+        data: { uid: Config.uid, appcode:'DICTATION',formids:formids},
+        success: function (res) {
+        	console.log("成功拉啊")
+        	console.log(res)
+          if (res.data.success) {
+          	if(cb){
+          		cb(res.data)
+          	}           
+          }
+          else {
+            console.log(res.data.mesage)
+          }
+        },
+        fail: function (res) {
+          console.log("失败拉啊")
+        }
+      })
+    },
+    checkText:function(content,successCb,failCb){//过滤敏感词汇
+    	var services=Config.services;//services: "http://deveapi.chubanyun.net/api/Dictation/",
+    	var index=services.indexOf('/api/');
+			var str=services.substring(0,index+5)
+			wx.request({
+        url: `${str}Aliyun/AliyunCommon/CheckText?content=${content}`,
+        method: 'POST',
+        success: function (res) {
+          console.log("成功拉啊", content)
+        	console.log(res)
+          if (res.data.success) {
+          	  successCb(res.data);
+          }else {
+            if(failCb){
+          		failCb(res.data);
+          	}
+          }
+        },
+        fail: function (res) {
+          console.log("失败拉啊")
+        }
+      })
+   },
+   getAppBanner: function (cb) {//首页广告banner
+    	var services=Config.services;//services: "http://deveapi.chubanyun.net/api/Dictation/",
+    	var index=services.indexOf('/api/');
+			var str=services.substring(0,index+5)
+      wx.request({
+        url: `${str}Platform/AppCommon/GetAppBanner`,
+        method: 'GET',
+        data: { appcode:'DICTATION' },
+        success: function (res) {
+        	console.log("成功拉啊")
+        	console.log(res)
+          if (res.data.success) {
+          	if(cb){
+          		cb(res.data)
+          	}           
+          }
+          else {
+            console.log(res.data.mesage)
+          }
+        },
+        fail: function (res) {
+          console.log("失败拉啊")
+        }
+      })
+    },
   }
 })

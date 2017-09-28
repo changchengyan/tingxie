@@ -8,7 +8,6 @@
   flex-flow: column nowrap;
   z-index: 50;
 }
-
 .not_show {
   display: none;
 }
@@ -55,8 +54,15 @@
 
 /*书桌样式  */
 
+page {
+  /* background: url(http://image.chubanyun.net/images/Dictation/word/bg.png); *//*background: url(http://imglf0.nosdn.127.net/img/TkRpUWhnbGQwcUpUa2JzYWZITVhXbXEyeU9DbXdQeDJna1dUVlJ5dlY5ZUN4eVdBYTFIRVZBPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg) no-repeat;*//* background-color: #217a7e; */
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(250, 250, 250, 1));
+  background-attachment: fixed;
+}
+
 .container {
   display: block;
+
 }
 
 view {
@@ -67,7 +73,6 @@ view {
   height: 100%;
   width: 100%;
   position: absolute;
-  background-color: #e8e8e8;
 }
 
 .flex-body {
@@ -103,13 +108,6 @@ view {
   height: 210px;
 }
 
-.user-count-info {
-  padding: 20px 0px 20px 0px;
-  text-align: center;
-  font-size: 12px;
-  color: #999;
-}
-
 .flex-body .book-desk {
   background-color: #d9bef7;
   font-size: 12pt;
@@ -119,41 +117,42 @@ view {
 }
 
 .book-add-area {
-  height: 138rpx;
-  background-color: #dafaf4;
-  text-align: center;
+  /*background: -webkit-linear-gradient(top, rgba(6, 193, 174, 1),rgba(6, 193, 174, 1));*/
   position: fixed;
-  z-index: 2;
   top: 0px;
   left: 0px;
-  width: 100%;
   display: flex;
+  flex-flow: row nowrap;
   justify-content: space-between;
-  padding: 0 15px;
   align-items: center;
+  padding: 0 30rpx;
+  width: 100%;
+  height: 162rpx;
+  background-color: #06c1ae;
+  z-index: 2;
 }
 
 .book-add-area .book-count {
   color: #fff;
 }
 
-.f-book-count {
-  font-size: 30px;
+.f-book-count, .book-add-area .book-scan {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+  height: 162rpx;
+  padding: 30rpx 0 30rpx 0;
 }
 
-.f-book-count image{
-  width: 175rpx;
-  height: 88rpx;
-}
-
-.book-add-area .book-scan {
-  text-align: center;
+.f-book-count image {
+  width: 43rpx;
+  height: 53rpx;
 }
 
 .book-scan image {
-  width: 115rpx;
-  height: 92rpx;
-  display:block;
+  width: 58rpx;
+  height: 58rpx;
 }
 
 /*.book-count .text{
@@ -169,7 +168,7 @@ view {
 }
 
 .book-add-area-visibility {
-  height: 138rpx;
+  height: 162rpx;
   text-align: center;
   padding: 20pt 0pt 0pt 0pt;
   color: #999;
@@ -194,41 +193,76 @@ view {
 
 .add_book_way view:last-of-type {
   border: none;
-}*/
+}
+
 .app_desc {
-  padding: 20px 0px 30px 0px;
   text-align: center;
-  font-size: 16px;
   line-height: 28px;
-  color: #4bc29a;
-} 
+  font-weight: 600;
+  color: #06c1ae;
+}*/
 
 /*书架为空的样式  */
 
 .nobook_container {
+  height:100%;
+}
+.nobook_container .themeBox{
+   height: calc(100vh - 140px); 
+}
+.poster-img {
+ 
+}
+.poster-item {
+  margin: 0 auto;
+  width:100%;
   display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  height:100%
+}
+.nobook_container .grade{
+	padding:0 35rpx;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+.nobook_container .grade view{
+	width:200rpx;
+	height:74rpx;
+	line-height:74rpx;
+	border:1px solid #06c1ae;
+	border-radius:40rpx;
+	color:#06c1ae;
+	font-size:18px;
+	text-align:center;
+	margin-top:40rpx;
+}
+.nobook_container .wx-swiper-dot-active{
+	background:#06c1ae;
 }
 
-.tadpole {
-  margin: 187rpx 0 96rpx 0;
-  width: 144rpx;
-  height: 87rpx;
-}
-
+/*
 .add_book {
-  margin-top: 40rpx;
-  width: 300rpx;
-  height: 80rpx;
+  margin-top: 140rpx;
+  width: 227rpx;
+  height: 91rpx;
   font-size: 18px;
-  color: #eee;
-  line-height: 80rpx;
+  color: #fff;
+  line-height: 91rpx;
   text-align: center;
-  background-color: #4bc29a;
-  border-radius: 10rpx;
+  background: url(http://image.chubanyun.net/images/Dictation/desktop/add_green.png) 0 0 no-repeat;
+  background-size: contain;
 }
+.user-count-info {
+  padding: 40rpx 0 40rpx 0;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+*/
 
 /**书籍列表**/
 
@@ -242,11 +276,11 @@ view {
   align-content: flex-start;
   width: 100%;
   /* min-height: calc(100% - 40rpx); */
-  
 }
-.bookWrap{
-  min-height:calc(100% - 138rpx); 
-	position:relative;
+
+.bookWrap {
+  min-height: calc(100% - 162rpx);
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
@@ -255,7 +289,7 @@ view {
 
 .book-list .item .item-delete {
   position: absolute;
-  z-index: 1;
+  z-index: 5;
   width: 35px;
   height: 35px;
   margin-left: -10px;
@@ -271,11 +305,12 @@ view {
   width: 33.33%;
   text-align: center;
   padding: 10px;
+  position:relative;
 }
-
 .book-list .item-content {
   box-shadow: 0 0 5px 2px #eee;
   background-color: #fff;
+  position: relative;
 }
 
 .book-list .item .item-content .icon-view {
@@ -302,34 +337,35 @@ view {
   background-size: 100% auto;
 }
 
-.wave{
-	width:262rpx;
-	height:228rpx;
-	position:absolute;
-	background:url(http://image.chubanyun.net/images/Dictation/desktop/wave.png) no-repeat;
-	
-	z-index:-1;
+.wave {
+  width: 262rpx;
+  height: 228rpx;
+  position: absolute;
+  /*	background:url(http://image.chubanyun.net/images/Dictation/desktop/wave.png) no-repeat;*/
+  z-index: -1;
 }
-.wave1{
-	left:350rpx;
-	bottom:260rpx;
-	background-size:contain;
-}
-.wave2{
-	width:131rpx;
-	height:114rpx;
-	left:0;
-	bottom:0;
-	background-size:200%;
-	background-position:right top;
 
+.wave1 {
+  left: 350rpx;
+  bottom: 260rpx;
+  background-size: contain;
 }
-.wave3{
-	width:131rpx;
-	height:228rpx;
-	right:0;
-	bottom:25rpx;
-	background-size:200%;
+
+.wave2 {
+  width: 131rpx;
+  height: 114rpx;
+  left: 0;
+  bottom: 0;
+  background-size: 200%;
+  background-position: right top;
+}
+
+.wave3 {
+  width: 131rpx;
+  height: 228rpx;
+  right: 0;
+  bottom: 25rpx;
+  background-size: 200%;
 }
 
 /* .bottom_block{
@@ -438,6 +474,116 @@ view {
   text-align: center;
 }
 
+.ispay {
+  position: absolute;
+  width: 100%;
+  height: 45rpx;
+  top: 0;
+  left: 0
+}
+
+.pay_txt{
+  position: absolute;
+  top: 10rpx ;
+  left:  26rpx;
+  color: #fff;
+  font-size: 21rpx;
+
+}
+/*deviceId*/
+.deviceId-down {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
+}
+.bindMask{
+ display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items:center;
+}
+.bindTips{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width:600rpx;
+  margin:0 auto;
+  background:#fff;
+  border-radius:10rpx;
+}
+.bindTips .text{
+	height:250rpx;
+	position:relative;
+	z-index:2;
+	font-size:16px;
+	color:#fffefe;
+	text-align:center;	
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  line-height:24px;
+}
+.bindTips .text image{
+	width:601rpx;
+	height:250rpx;
+	position:absolute;
+	left:0;
+	top:0;
+	z-index:-1;
+}
+.bindTips .btn{
+	display: flex;
+  flex-direction: row;
+  height:110rpx;
+  text-align:center;
+  line-height:110rpx;
+  color:#000;
+  font-size:18px;
+}
+.bindTips .btn .unBind{
+	width:50%;
+	border-right:1px solid #ccc;
+	box-sizing:border-box;
+}
+.bindTips .btn .quxiao{
+	width:50%;
+}
+/*听写主题*/
+.themeBox{
+	width:100%;
+	height:114rpx;
+}
+.themeBox .arrow{
+	/*width:100%;
+	height:114rpx;*/
+	position:relative;
+}
+.themeBox .arrow .next{
+	position:absolute;
+	right:0rpx;
+	top:10rpx;
+	padding:30rpx;
+}
+.themeBox .arrow .next image{
+	width:18rpx;
+	height:33rpx;
+}
+.themeBox .text{
+  text-align: center;
+}
+.themeBox .text text{
+  display: block;
+  color: #666;
+  
+}
+.themeBox .text .text1{
+  font-size: 22px;
+  line-height: 50px;
+}
+.themeBox .text .text2{
+  font-size: 16px;
+}
 /*自定义书籍样式  */
 
 /* .selfbook_up{

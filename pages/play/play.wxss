@@ -1,7 +1,8 @@
 view, text {
-  color: #000;
+  color: #fff;
   font-size: 30rpx;
 }
+
 view {
   box-sizing: border-box;
 }
@@ -19,40 +20,40 @@ image {
 
 page {
   height: 100%;
+  background:#6cd7ac;
 }
 
 .play-container {
-  min-height: 100%;
+  height: 100%;
   align-items: stretch;
+  width: 100%;
+  /* background: url("http://image.chubanyun.net/images/Dictation/play/play_bg.png") no-repeat center;
+  background-size: cover; */
+  background:-webkit-gradient(linear, 0 0, 0 bottom, from(#06c1ae), to(#6cd7ac)); 
+  background: linear-gradient(to bottom, #06c1ae, #67d6ac);
 }
 
 .progress {
-  width:100%;
-  padding:33rpx 0 46rpx;
-  /* box-shadow:0 1rpx 70rpx rgb(237, 237, 237); */
-  position:fixed;
-  /* background:url(http://image.chubanyun.net/images/Dictation/play/progress_bg.png) no-repeat center; */
-  background:#06c1ae;
-}
-
-.progress .line {
-  width: 490rpx;
+  width: 422rpx;
   height: 42rpx;
   /* background-color: rgb(238, 238, 238); */
   border-radius: 5rpx;
-  margin-top: 24rpx;
-  position: relative;
-  background:url(http://image.chubanyun.net/images/Dictation/play/progress_line.png) no-repeat center;
+  /* margin-top: 24rpx; */
+  background: url(http://image.chubanyun.net/images/Dictation/play/progress_line.png) no-repeat 0 0;
   background-size: 100% 42rpx;
+  padding: 7rpx 10rpx;
+}
+
+.progress .line {
+  width: 100%;
+  height: 100%;
 }
 
 .progress .line .done {
   background-color: rgb(60, 61, 61);
-  position: absolute;
-  left: 12rpx;
   height: 100%;
   transition: width 1.5s;
-   background:url(http://image.chubanyun.net/images/Dictation/play/progress_pass.png) no-repeat left center;
+  background: url(http://image.chubanyun.net/images/Dictation/play/progress_pass.png) no-repeat left center;
   background-size: 100% 30rpx;
   max-width: 470rpx;
 }
@@ -68,139 +69,158 @@ page {
   margin-left: -12rpx;
   left: 0;
   /* background-color: #fff; */
-  
   transition: all 1.5s;
 }
 
 .info {
-  flex-grow:1;
-  align-items:stretch;
-  height:100%;
-  padding:200rpx 0 400rpx;
-  overflow:auto;
-  /* background:url(http://image.chubanyun.net/images/Dictation/play/bg.png) no-repeat 35% 50%; */
-  background-color: #6cd7ac;
+  flex-grow: 1;
+  align-items: center;
+  height: 100%;
+  padding: 50rpx 0 520rpx;
+  overflow: hidden;
+  /* background:url(http://image.chubanyun.net/images/Dictation/play/bg.png) no-repeat 35% 50%; *//* background: #6cd7ac url(http://imglf1.nosdn.127.net/img/TkRpUWhnbGQwcUxPN2NnVzdhNjBZV0xqRFJTK21HZ2pob2k5anFIMXliVk1jazI1TTRBLzBRPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg) 0 180rpx no-repeat; */
   box-sizing: border-box;
-
+  /* background-size: 636rpx; */
 }
 
 .info .container {
-  flex-grow:1;
+  flex-grow: 1;
   /* text-align:center;
   display:flex;
   flex-direction:column;
   flex-wrap: wrap;
   justify-content:center; 
    align-items: center;  */
-  width:100%;
-  padding:0 20rpx; 
-  height:500rpx;
+  width: 100%;
+  padding: 0 20rpx;
+  height: 100%;
   /* height:100% ; */
-   box-sizing: border-box; 
-  margin-top: 80rpx;
-
-}
-.info .container .current-wrap{
   box-sizing: border-box;
-  text-align:center;
-  display:flex;
-  flex-direction:column;
+  /* margin-top: 80rpx; */
+}
+.info .container-swiper {
+  height: 100%;
+}
+.info .container .current-wrap {
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  justify-content:center; 
+  justify-content: center;
   align-items: center;
   width: 100%;
-  height:100%;
-  /* padding-top: 64rpx; */
-  overflow:scroll;
+  height: 100%;
+  /* padding-top: 64rpx;
+  overflow: scroll; */
 }
+
 .info .container .current-word-onlyLine {
-  font-size: 60rpx;
-  font-weight: bold;
-  width:100%; 
-  height:auto; 
+  font-size: 120rpx;
+  width: 100%;
+  height: auto;
   color: #fff;
   display: inline-block;
-  clear: both; 
+  clear: both;
+  max-height:100%;
+  text-align: center;
   /* padding-top:140rpx; */
+}
+.current-word-onlyLine view {
+  margin-top: 60rpx
+}
+.current-word-onlyLine .pinyin {
+  font-size:35rpx;
+  margin-bottom:20rpx;
+}
+.current-word-onlyLine .word-show {
+  text-align: center;
+  font-size: 120rpx;
+  margin: 0;
 }
 .info .container .current-word-moreLine {
   font-size: 60rpx;
   font-weight: bold;
-  width:100%; 
-  height:auto; 
+  width: 100%;
+  height: 100%;
   color: #fff;
   display: inline-block;
-  clear: both; 
-  padding-top:240rpx;
+  clear: both;
   text-align: left !important;
 }
+
 .info .container .current-time {
-  display: inline-block;
-  position: relative;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:100%;
 }
+
 .info .container .current-time .time-label {
   font-size: 24rpx;
   color: rgb(102, 102, 102);
 }
+
 .info .container .current-time text:first-child {
-  font-size: 24rpx;
-  margin-bottom: 10rpx;
-  position: absolute;
-  transform: translate(-100%, -100%);
+  font-size: 90rpx;
+  margin-bottom: 20rpx;
   color: #fff;
+  
+ 
 }
+
 .info .container .current-time text:last-child {
   font-size: 60rpx;
   color: #fff;
-}
- .setting-bar {
-  display:flex;
-  justify-content:space-around;
-  align-items:flex-end;
-  width:100%;
-  position:fixed;
-  bottom:225rpx;
-  background:transparent;
-  padding: 10rpx 0;
-
+  margin-left:-10rpx;
 }
 
- .setting-bar view {
+.setting-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  position: fixed;
+  bottom: 320rpx;
+  background: transparent;
+}
+
+.setting-bar view {
   flex-grow: 1;
   text-align: center;
 }
 
- .setting-bar view .icon {
+.setting-bar view .icon {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   display: block;
-  margin: 0 auto 15rpx;
+  margin: 0 auto;
 }
- .setting-bar view.gap .icon {
+
+.setting-bar view.gap .icon {
   font-weight: bold;
   color: rgb(15, 15, 15);
   font-size: 47rpx;
 }
- .setting-bar view text {
+
+.setting-bar view text {
   color: rgb(65, 65, 65);
 }
+
 .controller {
- 
-  height:198rpx;
+  height: 198rpx;
   /* background:linear-gradient(to right, rgb(65, 64, 65), rgb(13, 10, 10)); */
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:fixed;
-  left:0;
-  bottom:0;
-  width:100%;
-  background:url(../../images/play/button_bg.png) no-repeat center -10rpx;
-
-
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  bottom: 50rpx;
+  width: 100%;
+  /* background:url(http://image.chubanyun.net/images/Dictation/play/button_bg.png) no-repeat center -10rpx; */
 }
 
 .controller .side {
@@ -211,13 +231,15 @@ page {
 }
 
 .controller .play {
-  width: 142rpx;
-  height: 142rpx;
+  width: 153rpx;
+  height: 157rpx;
   margin: 0 90rpx;
 }
-.controller .prev {
+
+/* .controller .prev {
   transform: rotate(180deg);
-}
+} */
+
 .controller .prev, .controller .next {
   height: 60rpx;
   width: 60rpx;
@@ -238,54 +260,62 @@ page {
   margin-left: -225rpx;
   color: #fff;
 }
+
 .toast text {
   color: #fff;
 }
-.history-start {
-  position: fixed;
-  top: 184rpx;
-  width: 100%;
-  height: 120rpx;
 
-  
+.showInfo {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  margin-top: 80rpx;
 }
+
+.history-start {
+  width: 96rpx;
+  display: flex;
+  justify-content: flex-start;
+}
+
 /*根据星星的数量来显示星星*/
-.unit-star-3,.unit-star-2,.unit-star-1,.unit-star-0{
+
+.unit-star-3, .unit-star-2, .unit-star-1, .unit-star-0 {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: 10rpx 10rpx 0 10rpx;
   flex-grow: 0;
 }
-.unit-star-3 view,.unit-star-2 view,.unit-star-1 view{
+
+.unit-star-3 view, .unit-star-2 view, .unit-star-1 view {
   width: 60rpx;
   height: 60rpx;
   background: url(http://image.chubanyun.net/images/Dictation/play/start.png);
   background-size: cover;
 }
-.unit-star-3 view:nth-child(1),.unit-star-2 view:nth-child(1),.unit-star-1 view:nth-child(1){
+
+.unit-star-3 view:nth-child(1), .unit-star-2 view:nth-child(1),
+.unit-star-1 view:nth-child(1) {
   width: 60rpx;
   height: 60rpx;
   transform: scale(0.8) rotate(-15deg) translateY(20rpx);
-
 }
-.unit-star-3 view:nth-child(3){
+
+.unit-star-3 view:nth-child(3) {
   width: 60rpx;
   height: 60rpx;
   transform: scale(0.8) rotate(15deg) translateY(20rpx);
-
 }
 
-.unit-star-2 view:nth-child(3){
-  display: none
-}
-
-.unit-star-1 view:nth-child(2),.unit-star-1 view:nth-child(3){
+.unit-star-2 view:nth-child(3) {
   display: none;
-
-}
-.unit-star-0 view{
- display: none;
-  
 }
 
+.unit-star-1 view:nth-child(2), .unit-star-1 view:nth-child(3) {
+  display: none;
+}
+
+.unit-star-0 view {
+  display: none;
+}

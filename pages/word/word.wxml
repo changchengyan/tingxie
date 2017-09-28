@@ -1,71 +1,78 @@
 <!--word.wxml-->
 <import src="../template/template.wxml" />
 <import src="../../components/modal/modal.wxml" />
-
-<view class="my-title">自定义听写</view>
-<view class="image">
-  <image class="tianjia" catchtap="selfBook" src="/images/desktop/add.png"></image>
-</view>
-<!-- <view class="tianjia" catchtap="selfBook">+添加</view> -->
-
-<view bindscrolltolower="loadMore" class="list-wrapper">
-  <view class="refresh" style="width:327rpx;margin:0 auto" wx:if="{{ref}}">
-    <image class="gif" style="width:110rpx;height:25rpx" src="../../images/word/loading.gif"></image>
-    <text class="re_text">正在刷新</text>
+<view class="{{type_p}} wrap-bg">
+  <!-- <view class="my-title">自定义听写</view> -->
+  <view class="image">
+    <!-- <image class="tianjia" catchtap="selfBook" src="/images/desktop/add.png"></image> -->
+    <view class="tianjia" catchtap="selfBook"><text style="margin-left:50rpx">自定义听写</text></view>
   </view>
 
-
-  <view wx:if="{{item.wordCount!==0}}" wx:for="{{list}}" wx:key="uid" class="ll">
-    <view class="list" bindtap="click" data-lessonId="{{item.id}}" bindtouchstart="setTapStartTime" bindlongtap="onDelete" data-index="index">
-      <view class="unit_index">{{index+1}}</view>
-      <template is="star" data="{{...item}}"></template>
-      <!-- <view class="left">
-        <view class="time">
-          <view class="time_img">
-            <image class="" src="../../images/word/time_o.png"></image>
-          </view>
-          <view class="text">
-            <text class="text1">{{item.lesson_name}}</text>
-          </view>
+  <view class="haha">
+    <view class="list-wrapper">
+      <view wx:for="{{list}}" wx:key="uid" class="ll">
+        <view class="list" catchtap="click" data-lessonId="{{item.id}}" bindtouchstart="setTapStartTime" bindlongtap="onDelete" data-title="{{item.lesson_name}}" data-index="{{index}}">
+          <view class="unit_index">{{index+1}}</view>
+          <template is="star" data="{{...item}}"></template>
         </view>
-        <view class="small f2 txt2">词汇量:
-          <text class="num">{{item.wordCount}}</text>个</view>
-      </view>-->
+        <view class="time_txt two_line" data-index="{{index}}">{{item.lesson_name}}</view>
+      </view>
     </view>
-    <view class="time_txt">{{item.lesson_name}}</view>
+    <view class="no_more" wx:if="{{!loadMore && !loadding&&list.length!==0}}">已经全部加载完成</view>
+    <view class="no_more"  wx:else ></view>
   </view>
-  <view class="last" wx:if="{{loadding}}" style="width:327rpx;margin:0 auto">
-    <image class="gif" style="width:110rpx;height:25rpx" src="../../images/word/loading.gif"></image>
-    <text class="jz">{{loadText}}</text>
+  <view class="_more" wx:if="{{list.length==0}}">试试添加自定义听写练习吧!</view>
+
+  <!--submit  -->
+  <view class="proloadBg"></view>
+  <view class="submited" wx:if="{{isSubMit}}" catchtouchmove="catchTouchMove">
+    <view class="subBox" ></view>
+    <view class="sub_bg" bindtap="sub">
+    <view class="sub_close" catchtap="returnList">
+      <image src="/images/word/Menu-close.png" ></image>
+    </view>
+      <view class="tiaofu">
+        <image src="/images/word/tiaofu.png"></image>
+      </view>
+      <view class="sub_star_{{star}}">
+        <view style="margin-top:40rpx"></view>
+        <view></view>
+        <view style="margin-top:40rpx"></view>
+      </view>
+       <view class="tip_words">
+        <view class="tip_item">
+          本次听写
+          <text>{{wordNum}} </text>个词汇
+        </view>
+        <view class="tip_item">
+          用时
+          <text>{{testTime}} </text>s
+        </view>
+        
+        <image wx:if="{{!isImprove}}" src="/images/word/continue_strive.png" mode='widthFix'></image>
+        <image wx:else src="/images/word/get_progress.png" mode='widthFix'></image>
+      </view>
+      <view class="btn">
+        <view class="me">
+          <image src="/images/word/Menu-btn-word.png" bindtap="returnList"></image>
+          <image src="/images/word/Reload-btn.png" style="width:145rpx;height:145rpx" bindtap="playAgain"></image>
+          <image src="/images/word/Forward-btn.png" bindtap="nextPlay"></image>
+        </view>
+      </view>
+       <view class="to-error">本次错词已记录到错词库</view>
+    </view>
   </view>
 
-<!--submit  -->
-<view class="submited" wx:if="{{returnload}}">
- <view class="subBox"></view> 
-<view class="sub_bg" bindtap="sub">
-    <view class="sub_star_{{star}}">
-    <view></view>
-    <view style="margin-top:-40rpx"></view>
-    <view></view>
-  </view> 
-   <view class="tips_star">
-    <view wx:if="{{star>1}}">恭喜,恭喜,恭喜你！</view>
-    <view wx:elif="{{star==1}}">继续加油哦！</view>
-    <view wx:elif="{{star==0}}">哈哈哈 没有星星吧！</view>
+  <!--下拉加载  -->
+  <view class="last" wx:if="{{loadding}}" style="width:100%;display:flex;justify-content:center;" >
+    <image class="gif" style="width:120rpx;height:25rpx" src="/images/word/loading.gif"></image>
+    <text class="jz"></text>                    
   </view>
-  <view class="btn">
-    <view class="me">
-     <image src="../../images/finally/list.png" bindtap="returnList"></image>
-    <image src="../../images/finally/again.png" style="width:160rpx;height:160rpx" bindtap="playAgain"></image>
-    <image src="../../images/finally/next.png" bindtap="nextPlay" style="margin-right:35rpx"></image> 
-  </view>
-  </view>  
-</view>
-</view>
 
   <!--modal-->
   <template is="modal" data="{{..._modal}}"></template>
 </view>
+
 <!--loading  -->
 <import src="../template/template.wxml" />
 <template is="pageLoading" data="{{isLoading}}"></template>
